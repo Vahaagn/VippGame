@@ -2,13 +2,11 @@
 
 #include "GameTime.h"
 
-GameTime::GameTime(sf::Clock& sfml_clock, long delta_i)
+GameTime::GameTime(sf::Time& elapsed_time)
 {
-	auto time = sfml_clock.getElapsedTime();
-
-	total_microseconds = time.asMicroseconds();
-	total_miliseconds = time.asMilliseconds();
-	total_seconds = time.asSeconds();
+	total_microseconds = elapsed_time.asMicroseconds();
+	total_miliseconds = elapsed_time.asMilliseconds();
+	total_seconds = elapsed_time.asSeconds();
 	total_minutes = total_seconds / 60;
 
 	minutes = total_minutes;
@@ -16,5 +14,5 @@ GameTime::GameTime(sf::Clock& sfml_clock, long delta_i)
 	miliseconds = total_miliseconds % 1000;
 	microseconds = total_microseconds % 1000;
 
-	delta_time = delta_i / 1000.0 / 1000.0;
+	delta_time = total_microseconds / 1000.0 / 1000.0;
 }

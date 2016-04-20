@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include <ctime>
 #include <SFML/System.hpp>
 
 class GameTime
@@ -22,5 +21,5 @@ public:
 	time_t time;
 
 	//
-	GameTime(sf::Clock& sfml_clock, long delta_i);
+	GameTime(sf::Time& elapsed_time);
 };

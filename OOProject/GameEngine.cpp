@@ -27,11 +27,9 @@ void GameEngine::init()
 
 void GameEngine::start()
 {
-	long delta_i = 0;
-
 	while (render_window_->isOpen())
 	{
-		update_clock_.restart();
+		sf::Time elapsed_time = update_clock_.restart();
 
 		sf::Event event;
 		while (render_window_->pollEvent(event))
@@ -42,13 +40,12 @@ void GameEngine::start()
 
 		render_window_->clear(sf::Color::Black);
 
-		GameTime game_time(update_clock_, delta_i);
+		GameTime game_time(elapsed_time);
 
 		update(game_time);
 		draw();
 
 		render_window_->display();
-		delta_i = update_clock_.getElapsedTime().asMicroseconds();
 	}
 }
 
