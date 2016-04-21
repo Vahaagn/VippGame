@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 
 #include "FpsCounter.h"
+#include "ParticleSystem.h"
+#include "TextObject.h"
 
 class GameEngine
 {
@@ -12,6 +14,10 @@ private:
 	FpsCounter* fps_counter_;
 	sf::Clock update_clock_;
 	sf::Font font;
+	ParticleSystem* particles;
+	TextObject* text_1_;
+
+	bool fps_show_b_;
 
 public:
 	GameEngine();
@@ -22,4 +28,7 @@ public:
 
 	void update(GameTime& game_time);
 	void draw();
+
+	void show_fps_counter();
+	void hide_fps_counter();
 };

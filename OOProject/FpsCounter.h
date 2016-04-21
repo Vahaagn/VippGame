@@ -2,10 +2,6 @@
 
 #include <SFML/Graphics.hpp>
 
-namespace sf{
-	class RenderWindow;
-}
-
 class FpsCounter
 {
 	sf::Text* fps_text;

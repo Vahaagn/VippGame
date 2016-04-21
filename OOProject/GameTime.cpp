@@ -15,4 +15,5 @@ GameTime::GameTime(sf::Time& elapsed_time)
 	microseconds = total_microseconds % 1000;
 
 	delta_time = total_microseconds / 1000.0 / 1000.0;
+	time_ = elapsed_time;
 }

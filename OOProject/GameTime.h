@@ -18,7 +18,7 @@ public:
 	double delta_time;
 
 	/// [WiP] Do not use yet
-	time_t time;
+	sf::Time time_;
 
 	//
 	GameTime(sf::Time& elapsed_time);
