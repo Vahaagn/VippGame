@@ -1,8 +1,5 @@
 ﻿#pragma once
 
-#include <SFML/Graphics.hpp>
-#include <functional>
-
 class TextObject : public sf::Drawable, public sf::Transformable
 {
 private:

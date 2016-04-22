@@ -1,7 +1,5 @@
 ﻿#pragma once
-#include "stdafx.h"
 
-#include <SFML/Graphics.hpp>
 #include "Particle.h"
 
 class ParticleSystem : public sf::Drawable, public sf::Transformable

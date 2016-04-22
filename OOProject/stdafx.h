@@ -7,9 +7,14 @@
 
 #include "targetver.h"
 
+#include <iostream>
 #include <stdio.h>
 #include <tchar.h>
+#include <functional>
 
-
-
-// TODO: reference additional headers your program requires here
+#include <SFML/OpenGL.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Network.hpp>
+#include <SFML/Audio.hpp>

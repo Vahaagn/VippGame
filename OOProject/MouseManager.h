@@ -1,10 +1,5 @@
 ﻿#pragma once
 
-#include <SFML/System/Vector2.hpp>
-#include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Window/Window.hpp>
-
-
 class MouseManager
 {
 private:

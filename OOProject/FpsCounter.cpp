@@ -5,6 +5,7 @@
 
 FpsCounter::FpsCounter(sf::Font& font)
 {
+	frames = 0;
 	this->fps_font = &font;
 
 	init();

@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{91f1e2ec-8924-4052-9578-306561d34f64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Vertex">
+      <UniqueIdentifier>{db0b46bf-c526-4e14-a3aa-36d7b0c7bcc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Fragment">
+      <UniqueIdentifier>{19d84f15-55a4-4656-be3b-abc4fcf35396}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -86,11 +95,19 @@
     <ClCompile Include="ParticleSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Particle.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="TextObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.vert">
+      <Filter>Shaders\Vertex</Filter>
+    </None>
+    <None Include="test.frag">
+      <Filter>Shaders\Fragment</Filter>
+    </None>
   </ItemGroup>
 </Project>
