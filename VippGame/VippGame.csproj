@@ -63,7 +63,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\GameEngine.cs" />
+    <Compile Include="Core\Particle.cs" />
+    <Compile Include="Core\ParticleSystem.cs" />
     <Compile Include="Core\TextGL.cs" />
+    <Compile Include="Core\MyTextWriter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Fonts.Designer.cs">
@@ -71,6 +74,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Fonts.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Converters.cs" />
     <Compile Include="Utils\FpsCounter.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,10 @@
-﻿using SFML.Graphics;
+﻿using System.Drawing;
+using OpenTK.Graphics.OpenGL;
+using SFML.Graphics;
 using SFML.System;
 using VippGame.Core;
+using Color = SFML.Graphics.Color;
+using Font = SFML.Graphics.Font;
 
 namespace VippGame.Utils
 {
@@ -9,11 +13,11 @@ namespace VippGame.Utils
         private int _fps;
         private Text _fpsText;
         private readonly Clock _loopClock;
-        private TextGL _textGl;
+        private MyTextWriter _textGl;
 
         public FpsCounter(Font font, uint size = 12, Color? color = null, Text.Styles? styles = null)
         {
-            _textGl = new TextGL();
+            _textGl = new MyTextWriter();
             _fpsText = new Text();
 
             _fpsText.Font = font;
@@ -46,6 +50,7 @@ namespace VippGame.Utils
             }
 
             _fpsText.DisplayedString = "FPS: " + _fps;
+            _textGl.UpdateText(_fpsText.DisplayedString);
             _fps = 0;
             _loopClock.Restart();
         }

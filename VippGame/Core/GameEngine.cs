@@ -13,33 +13,42 @@ namespace VippGame.Core
 {
     public class GameEngine
     {
+        #region [ Fields ]
         private RenderWindow _window;
         private readonly Clock _gameClock;
         private readonly Clock _loopClock;
+        private readonly Random _random;
         private FpsCounter _fpsCounter;
+        private ParticleSystem _particles;
+        #endregion
 
+        #region [ Properties ]
         public bool ShowFps { get; set; }
+        public string WindowTitle { get; set; }
+        #endregion
 
+        #region [ Constructors ]
         public GameEngine()
         {
             _gameClock = new Clock();
             _loopClock = new Clock();
+            _random = new Random(DateTime.Now.Millisecond);
         }
+        #endregion
 
+        #region [ Public methods ]
         public void Init()
         {
             OpenTK.Toolkit.Init();
-
-            ContextSettings contextSettings = new ContextSettings();
-            contextSettings.DepthBits = 32;
-            _window = new RenderWindow(new VideoMode(640, 480), "VippGame", Styles.Default, contextSettings);
+            
+            _window = new RenderWindow(new VideoMode(640, 480), WindowTitle, Styles.Default, GetContextSettings());
+            _window.SetFramerateLimit(60);
+            _window.SetVerticalSyncEnabled(true);
             _window.SetActive();
 
             GraphicsContext graphicsContext = new GraphicsContext(new ContextHandle(IntPtr.Zero), null);
 
-            _window.Closed += window_Closed;
-            _window.Resized += window_Resized;
-            _window.KeyPressed += window_KeyPressed;
+            ConfigureEvents();
         }
 
         public void Start()
@@ -60,6 +69,8 @@ namespace VippGame.Core
             Time elapsedTime = _loopClock.Restart();
             _fpsCounter = new FpsCounter(font);
 
+            _particles = new ParticleSystem(_random, 100);
+
             while (_window.IsOpen)
             {
                 _window.DispatchEvents();
@@ -73,7 +84,9 @@ namespace VippGame.Core
                 elapsedTime = _loopClock.Restart();
             }
         }
+        #endregion
 
+        #region [ Private methods ]
         private void Draw()
         {
             DrawOpenGl();
@@ -95,19 +108,21 @@ namespace VippGame.Core
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
 
-            _window.PushGLStates();
+            
+
             _fpsCounter.Draw();
-            _window.PopGLStates();
         }
 
         private void DrawSfml()
         {
-            _fpsCounter.Draw(_window);
+            _particles.DrawSfml(_window);
+
+            //_fpsCounter.Draw(_window);
         }
 
         private void Update(Time gameTime)
         {
-            // Nothing yet
+            _particles.Update(gameTime);
         }
 
         private void ConfigureOpenGl()
@@ -126,6 +141,29 @@ namespace VippGame.Core
             GL.Frustum(-ratio, ratio, -1, 1, 1, 500);
         }
 
+        private ContextSettings GetContextSettings()
+        {
+            ContextSettings contextSettings = new ContextSettings
+            {
+                MajorVersion = 3,
+                MinorVersion = 1,
+                DepthBits = 24,
+                StencilBits = 8,
+                AntialiasingLevel = 4,
+                AttributeFlags = ContextSettings.Attribute.Debug
+            };
+
+            return contextSettings;
+        }
+
+        private void ConfigureEvents()
+        {
+            _window.Closed += window_Closed;
+            _window.Resized += window_Resized;
+            _window.KeyPressed += window_KeyPressed;
+        }
+
+        // TODO: It's just temporary! Remember to delete it later
         private static float[] GetCube()
         {
             return new float[]
@@ -173,6 +211,7 @@ namespace VippGame.Core
                 50, 50, 50, 1, 1, 0, 1,
             };
         }
+        #endregion
 
         #region [ Events ]
         private void window_KeyPressed(object sender, KeyEventArgs e)

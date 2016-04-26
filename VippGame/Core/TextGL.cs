@@ -48,13 +48,14 @@ namespace VippGame.Core
                 PixelType.UnsignedByte, data.Scan0);
             _bitmap.UnlockBits(data);
 
-            GL.MatrixMode(MatrixMode.Projection);
+            GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
             GL.Ortho(0, _bitmap.Width, _bitmap.Height, 0, -1, 1);
 
             GL.Enable(EnableCap.Texture2D);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.BindTexture(TextureTarget.Texture2D, _texture);
 
             GL.Begin(PrimitiveType.Quads);
             GL.TexCoord2(0f, 1f); GL.Vertex2(0f, 0f);
@@ -62,6 +63,8 @@ namespace VippGame.Core
             GL.TexCoord2(1f, 0f); GL.Vertex2(1f, 1f);
             GL.TexCoord2(0f, 0f); GL.Vertex2(0f, 1f);
             GL.End();
+
+            // Swap buffers
         }
 
         public void Update()
