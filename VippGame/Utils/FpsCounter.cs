@@ -1,5 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.System;
+using VippGame.Core;
 
 namespace VippGame.Utils
 {
@@ -8,9 +9,11 @@ namespace VippGame.Utils
         private int _fps;
         private Text _fpsText;
         private readonly Clock _loopClock;
+        private TextGL _textGl;
 
         public FpsCounter(Font font, uint size = 12, Color? color = null, Text.Styles? styles = null)
         {
+            _textGl = new TextGL();
             _fpsText = new Text();
 
             _fpsText.Font = font;
@@ -22,9 +25,14 @@ namespace VippGame.Utils
             _loopClock = new Clock();
         }
 
+        public void Draw()
+        {
+            _textGl.Draw();
+        }
+
         public void Draw(RenderWindow renderWindow)
         {
-            renderWindow.Draw(_fpsText);
+            //renderWindow.Draw(_fpsText);
         }
 
         public void Update()

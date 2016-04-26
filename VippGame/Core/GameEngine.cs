@@ -94,6 +94,10 @@ namespace VippGame.Core
             GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 50, 0.0F, 0.0F, 0.75F);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+
+            _window.PushGLStates();
+            _fpsCounter.Draw();
+            _window.PopGLStates();
         }
 
         private void DrawSfml()
