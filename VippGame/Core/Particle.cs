@@ -12,21 +12,21 @@ namespace VippGame.Core
     public class Particle
     {
         private Random _rand;
-        private int _size;
+        private float _size;
         private float _angle;
         private float _speed;
-        private Vector2 _velocity;
-        public Vector2 _position;
+        private Vector3 _velocity;
+        public Vector3 _position;
         private Time _lifeTime;
         public Color _color;
 
-        public Particle(Random rand, Vector2? position = null, int size = 2)
+        public Particle(Random rand, Vector3? position = null, float size = 1.5f, Color? color = null)
         {
             _rand = rand;
 
             _size = size;
-            _position = position ?? Vector2.Zero;
-            _color = Color.White;
+            _position = position ?? Vector3.Zero;
+            _color = color ?? Color.White;
 
             Reset();
         }
@@ -45,11 +45,11 @@ namespace VippGame.Core
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
-            GL.Color3(_color);
+            GL.Color4(_color);
             GL.PointSize(_size);
 
             GL.Begin(PrimitiveType.Points);
-            GL.Vertex2(_position);
+            GL.Vertex2(_position.Xy);
             GL.End();
             
             GL.Disable(EnableCap.Blend);
@@ -57,6 +57,21 @@ namespace VippGame.Core
             GL.PopMatrix();
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PopMatrix();
+        }
+
+        public void Draw3D()
+        {
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+
+            GL.Color4(_color);
+            GL.PointSize(_size);
+
+            GL.Begin(PrimitiveType.Points);
+            GL.Vertex3(_position);
+            GL.End();
+
+            GL.Disable(EnableCap.Blend);
         }
 
         public void Update(Time gameTime)
@@ -74,14 +89,17 @@ namespace VippGame.Core
             _color = Color.FromArgb((int) (ratio*255), _color);
         }
 
+        /// <summary>
+        /// This will reset the angle, speed, velocity, lifetime and position of the Particle with random values
+        /// </summary>
         private void Reset()
         {
             _angle = (float)(_rand.Next(0, 360) * Math.PI / 180f);
             _speed = _rand.Next(0, 50) + 50f;
 
-            _velocity = new Vector2((float)Math.Cos(_angle) * _speed, (float)Math.Sin(_angle) * _speed);
+            _velocity = new Vector3((float)Math.Cos(_angle) * _speed, (float)Math.Sin(_angle) * _speed, (float)Math.Sin(_angle)*_speed);
             _lifeTime = Time.FromMilliseconds(_rand.Next(1000, 3000));
-            _position = new Vector2(_rand.Next(0, 640), _rand.Next(0, 480));
+            _position = new Vector3(_rand.Next(-640, 640), _rand.Next(-480, 480), _rand.Next(-200, 200));
         }
     }
 }

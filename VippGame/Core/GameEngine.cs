@@ -108,14 +108,13 @@ namespace VippGame.Core
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
 
-            
-
+            _particles.Draw();
             _fpsCounter.Draw();
         }
 
         private void DrawSfml()
         {
-            _particles.DrawSfml(_window);
+            //_particles.DrawSfml(_window);
 
             //_fpsCounter.Draw(_window);
         }

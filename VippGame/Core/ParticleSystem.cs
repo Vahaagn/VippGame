@@ -1,7 +1,9 @@
 ﻿using System;
+using OpenTK.Graphics.OpenGL;
 using SFML.Graphics;
 using SFML.System;
 using VippGame.Utils;
+using PrimitiveType = SFML.Graphics.PrimitiveType;
 
 namespace VippGame.Core
 {
@@ -26,12 +28,20 @@ namespace VippGame.Core
             for (uint i = 0; i < _vertexArray.VertexCount; i++)
             {
                 Vertex vertex = _vertexArray[i];
-                vertex.Position = _particles[i]._position.ToVector2F();
+                vertex.Position = _particles[i]._position.Xy.ToVector2F();
                 vertex.Color.A = _particles[i]._color.A;
                 _vertexArray[i] = vertex;
             }
 
             renderWindow.Draw(_vertexArray);
+        }
+
+        public void Draw()
+        {
+            foreach (var particle in _particles)
+            {
+                particle.Draw3D();
+            }
         }
 
         public void Update(Time gameTime)
