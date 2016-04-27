@@ -10,9 +10,9 @@ namespace VippGame.Utils
             return new Vector2f(vector2.X, vector2.Y);
         }
 
-        public static Vector2 ToVector2(this Vector2f vector2f)
+        public static Vector2 ToVector2(this Vector2f vector2F)
         {
-            return new Vector2(vector2f.X, vector2f.Y);
+            return new Vector2(vector2F.X, vector2F.Y);
         }
     }
 }

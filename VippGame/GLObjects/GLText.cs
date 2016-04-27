@@ -3,9 +3,9 @@ using System.Drawing.Imaging;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace VippGame.Core
+namespace VippGame.GLObjects
 {
-    class MyTextWriter
+    class GlText
     {
         private readonly Bitmap _textBitmap;
         private readonly int _textureId;
@@ -14,7 +14,7 @@ namespace VippGame.Core
         public string Text { get; set; }
         public Font Font { get; set; }
 
-        public MyTextWriter()
+        public GlText()
         {
             _textBitmap = new Bitmap(100, 50);
             _clientSize = new Size(640, 480);

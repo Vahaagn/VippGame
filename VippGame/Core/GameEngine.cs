@@ -6,6 +6,7 @@ using OpenTK.Graphics.OpenGL;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using VippGame.Shapes;
 using VippGame.Utils;
 using PrimitiveType = OpenTK.Graphics.OpenGL.PrimitiveType;
 
@@ -20,6 +21,7 @@ namespace VippGame.Core
         private readonly Random _random;
         private FpsCounter _fpsCounter;
         private ParticleSystem _particles;
+        private Cube _cube;
         #endregion
 
         #region [ Properties ]
@@ -55,21 +57,13 @@ namespace VippGame.Core
         {
             ConfigureOpenGl();
 
-            var cube = GetCube();
-
-            GL.EnableClientState(ArrayCap.VertexArray);
-            GL.EnableClientState(ArrayCap.ColorArray);
-            GL.VertexPointer(3, VertexPointerType.Float, 7 * sizeof(float), Marshal.UnsafeAddrOfPinnedArrayElement(cube, 0));
-            GL.ColorPointer(4, ColorPointerType.Float, 7 * sizeof(float), Marshal.UnsafeAddrOfPinnedArrayElement(cube, 3));
-            GL.DisableClientState(ArrayCap.NormalArray);
-            GL.DisableClientState(ArrayCap.TextureCoordArray);
-
             var font = new Font(Resources.Fonts.consola);
 
             Time elapsedTime = _loopClock.Restart();
             _fpsCounter = new FpsCounter(font);
 
             _particles = new ParticleSystem(_random, 100);
+            _cube = new Cube();
 
             while (_window.IsOpen)
             {
@@ -102,12 +96,11 @@ namespace VippGame.Core
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
             GL.Translate(0.0F, 0.0F, -200.0F);
-            GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 50, 1.0F, 0.0F, 0.0F);
-            GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 50, 0.0F, 0.5F, 0.0F);
-            GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 50, 0.0F, 0.0F, 0.75F);
+            GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 10, 1.0F, 0.0F, 0.0F);
+            GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 10, 0.0F, 0.5F, 0.0F);
+            GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 10, 0.0F, 0.0F, 0.75F);
 
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
-
+            _cube.Draw();
             _particles.Draw();
             _fpsCounter.Draw();
         }
@@ -160,55 +153,6 @@ namespace VippGame.Core
             _window.Closed += window_Closed;
             _window.Resized += window_Resized;
             _window.KeyPressed += window_KeyPressed;
-        }
-
-        // TODO: It's just temporary! Remember to delete it later
-        private static float[] GetCube()
-        {
-            return new float[]
-            {
-                -50, -50, -50, 0, 0, 1, 1,
-                -50, 50, -50, 0, 0, 1, 1,
-                -50, -50, 50, 0, 0, 1, 1,
-                -50, -50, 50, 0, 0, 1, 1,
-                -50, 50, -50, 0, 0, 1, 1,
-                -50, 50, 50, 0, 0, 1, 1,
-
-                50, -50, -50, 0, 1, 0, 1,
-                50, 50, -50, 0, 1, 0, 1,
-                50, -50, 50, 0, 1, 0, 1,
-                50, -50, 50, 0, 1, 0, 1,
-                50, 50, -50, 0, 1, 0, 1,
-                50, 50, 50, 0, 1, 0, 1,
-
-                -50, -50, -50, 1, 0, 0, 1,
-                50, -50, -50, 1, 0, 0, 1,
-                -50, -50, 50, 1, 0, 0, 1,
-                -50, -50, 50, 1, 0, 0, 1,
-                50, -50, -50, 1, 0, 0, 1,
-                50, -50, 50, 1, 0, 0, 1,
-
-                -50, 50, -50, 0, 1, 1, 1,
-                50, 50, -50, 0, 1, 1, 1,
-                -50, 50, 50, 0, 1, 1, 1,
-                -50, 50, 50, 0, 1, 1, 1,
-                50, 50, -50, 0, 1, 1, 1,
-                50, 50, 50, 0, 1, 1, 1,
-
-                -50, -50, -50, 1, 0, 1, 1,
-                50, -50, -50, 1, 0, 1, 1,
-                -50, 50, -50, 1, 0, 1, 1,
-                -50, 50, -50, 1, 0, 1, 1,
-                50, -50, -50, 1, 0, 1, 1,
-                50, 50, -50, 1, 0, 1, 1,
-
-                -50, -50, 50, 1, 1, 0, 1,
-                50, -50, 50, 1, 1, 0, 1,
-                -50, 50, 50, 1, 1, 0, 1,
-                -50, 50, 50, 1, 1, 0, 1,
-                50, -50, 50, 1, 1, 0, 1,
-                50, 50, 50, 1, 1, 0, 1,
-            };
         }
         #endregion
 

@@ -1,32 +1,31 @@
 ﻿using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using SFML.Graphics;
-using VippGame.Utils;
-using Color = System.Drawing.Color;
+using System.Drawing;
 using PrimitiveType = OpenTK.Graphics.OpenGL.PrimitiveType;
 using Time = SFML.System.Time;
 
-namespace VippGame.Core
+namespace VippGame.GLObjects
 {
     public class Particle
     {
-        private Random _rand;
-        private float _size;
+        private readonly Random _rand;
+        private readonly float _size;
         private float _angle;
         private float _speed;
         private Vector3 _velocity;
-        public Vector3 _position;
         private Time _lifeTime;
-        public Color _color;
+
+        public Vector3 Position { get; set; }
+        public Color Color { get; set; }
 
         public Particle(Random rand, Vector3? position = null, float size = 1.5f, Color? color = null)
         {
             _rand = rand;
 
             _size = size;
-            _position = position ?? Vector3.Zero;
-            _color = color ?? Color.White;
+            Position = position ?? Vector3.Zero;
+            Color = color ?? Color.White;
 
             Reset();
         }
@@ -45,11 +44,11 @@ namespace VippGame.Core
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
-            GL.Color4(_color);
+            GL.Color4(Color);
             GL.PointSize(_size);
 
             GL.Begin(PrimitiveType.Points);
-            GL.Vertex2(_position.Xy);
+            GL.Vertex2(Position.Xy);
             GL.End();
             
             GL.Disable(EnableCap.Blend);
@@ -64,11 +63,11 @@ namespace VippGame.Core
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
-            GL.Color4(_color);
+            GL.Color4(Color);
             GL.PointSize(_size);
 
             GL.Begin(PrimitiveType.Points);
-            GL.Vertex3(_position);
+            GL.Vertex3(Position);
             GL.End();
 
             GL.Disable(EnableCap.Blend);
@@ -83,10 +82,10 @@ namespace VippGame.Core
                 Reset();
             }
 
-            _position += _velocity * gameTime.AsSeconds();
+            Position += _velocity * gameTime.AsSeconds();
 
             float ratio = _lifeTime.AsSeconds() / 3f;
-            _color = Color.FromArgb((int) (ratio*255), _color);
+            Color = Color.FromArgb((int) (ratio*255), Color);
         }
 
         /// <summary>
@@ -99,7 +98,7 @@ namespace VippGame.Core
 
             _velocity = new Vector3((float)Math.Cos(_angle) * _speed, (float)Math.Sin(_angle) * _speed, (float)Math.Sin(_angle)*_speed);
             _lifeTime = Time.FromMilliseconds(_rand.Next(1000, 3000));
-            _position = new Vector3(_rand.Next(-640, 640), _rand.Next(-480, 480), _rand.Next(-200, 200));
+            Position = new Vector3(_rand.Next(-640, 640), _rand.Next(-480, 480), _rand.Next(-200, 200));
         }
     }
 }

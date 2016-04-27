@@ -2,6 +2,7 @@
 using OpenTK.Graphics.OpenGL;
 using SFML.Graphics;
 using SFML.System;
+using VippGame.GLObjects;
 using VippGame.Utils;
 using PrimitiveType = SFML.Graphics.PrimitiveType;
 
@@ -9,8 +10,8 @@ namespace VippGame.Core
 {
     public class ParticleSystem
     {
-        private Particle[] _particles;
-        private VertexArray _vertexArray;
+        private readonly Particle[] _particles;
+        private readonly VertexArray _vertexArray;
 
         public ParticleSystem(Random rand, uint count = 50)
         {
@@ -28,8 +29,8 @@ namespace VippGame.Core
             for (uint i = 0; i < _vertexArray.VertexCount; i++)
             {
                 Vertex vertex = _vertexArray[i];
-                vertex.Position = _particles[i]._position.Xy.ToVector2F();
-                vertex.Color.A = _particles[i]._color.A;
+                vertex.Position = _particles[i].Position.Xy.ToVector2F();
+                vertex.Color.A = _particles[i].Color.A;
                 _vertexArray[i] = vertex;
             }
 
