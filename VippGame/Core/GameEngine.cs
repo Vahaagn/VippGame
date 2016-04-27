@@ -19,6 +19,8 @@ namespace VippGame.Core
         private readonly Clock _gameClock;
         private readonly Clock _loopClock;
         private readonly Random _random;
+
+        private InputManager _inputManager;
         private FpsCounter _fpsCounter;
         private ParticleSystem _particles;
         private Cube _cube;
@@ -60,8 +62,9 @@ namespace VippGame.Core
             var font = new Font(Resources.Fonts.consola);
 
             Time elapsedTime = _loopClock.Restart();
-            _fpsCounter = new FpsCounter(font);
 
+            _inputManager = new InputManager();
+            _fpsCounter = new FpsCounter(font);
             _particles = new ParticleSystem(_random, 100);
             _cube = new Cube();
 
@@ -96,9 +99,10 @@ namespace VippGame.Core
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
             GL.Translate(0.0F, 0.0F, -200.0F);
-            GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 10, 1.0F, 0.0F, 0.0F);
-            GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 10, 0.0F, 0.5F, 0.0F);
-            GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 10, 0.0F, 0.0F, 0.75F);
+            //GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 10, 1.0F, 0.0F, 0.0F);
+            //GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 10, 0.0F, 0.5F, 0.0F);
+            //GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 10, 0.0F, 0.0F, 0.75F);
+            _inputManager.Draw();
 
             _cube.Draw();
             _particles.Draw();
@@ -114,6 +118,7 @@ namespace VippGame.Core
 
         private void Update(Time gameTime)
         {
+            _inputManager.Update(gameTime);
             _particles.Update(gameTime);
         }
 
