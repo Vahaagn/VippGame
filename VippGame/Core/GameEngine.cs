@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -12,13 +13,14 @@ using PrimitiveType = OpenTK.Graphics.OpenGL.PrimitiveType;
 
 namespace VippGame.Core
 {
-    public class GameEngine
+    public class GameEngine : GameWindow
     {
         #region [ Fields ]
-        private RenderWindow _window;
+        //private RenderWindow _window;
         private readonly Clock _gameClock;
         private readonly Clock _loopClock;
         private readonly Random _random;
+        private Time _elapsedTime;
 
         private InputManager _inputManager;
         private FpsCounter _fpsCounter;
@@ -32,26 +34,24 @@ namespace VippGame.Core
         #endregion
 
         #region [ Constructors ]
+
         public GameEngine()
+            : base(640, 480, GraphicsMode.Default, "Test",
+                GameWindowFlags.Default, DisplayDevice.Default, 3, 1,
+                GraphicsContextFlags.Debug)
         {
             _gameClock = new Clock();
             _loopClock = new Clock();
             _random = new Random(DateTime.Now.Millisecond);
         }
+
         #endregion
 
         #region [ Public methods ]
         public void Init()
         {
-            OpenTK.Toolkit.Init();
+            Context.MakeCurrent(WindowInfo);
             
-            _window = new RenderWindow(new VideoMode(640, 480), WindowTitle, Styles.Default, GetContextSettings());
-            _window.SetFramerateLimit(60);
-            _window.SetVerticalSyncEnabled(true);
-            _window.SetActive();
-
-            GraphicsContext graphicsContext = new GraphicsContext(new ContextHandle(IntPtr.Zero), null);
-
             ConfigureEvents();
         }
 
@@ -61,25 +61,12 @@ namespace VippGame.Core
 
             var font = new Font(Resources.Fonts.consola);
 
-            Time elapsedTime = _loopClock.Restart();
-
             _inputManager = new InputManager();
             _fpsCounter = new FpsCounter(font);
             _particles = new ParticleSystem(_random, 100);
             _cube = new Cube();
 
-            while (_window.IsOpen)
-            {
-                _window.DispatchEvents();
-
-                Update(elapsedTime);
-                _fpsCounter.Update();
-
-                Draw();
-
-                _window.Display();
-                elapsedTime = _loopClock.Restart();
-            }
+            Run(60);
         }
         #endregion
 
@@ -87,9 +74,10 @@ namespace VippGame.Core
         private void Draw()
         {
             DrawOpenGl();
-            _window.PushGLStates();
-            DrawSfml();
-            _window.PopGLStates();
+
+            SwapBuffers();
+
+            _elapsedTime = _loopClock.Restart();
         }
 
         private void DrawOpenGl()
@@ -99,9 +87,7 @@ namespace VippGame.Core
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
             GL.Translate(0.0F, 0.0F, -200.0F);
-            //GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 10, 1.0F, 0.0F, 0.0F);
-            //GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 10, 0.0F, 0.5F, 0.0F);
-            //GL.Rotate(_gameClock.ElapsedTime.AsSeconds() * 10, 0.0F, 0.0F, 0.75F);
+
             _inputManager.Draw();
 
             _cube.Draw();
@@ -109,17 +95,12 @@ namespace VippGame.Core
             _fpsCounter.Draw();
         }
 
-        private void DrawSfml()
-        {
-            //_particles.DrawSfml(_window);
-
-            //_fpsCounter.Draw(_window);
-        }
-
         private void Update(Time gameTime)
         {
             _inputManager.Update(gameTime);
             _particles.Update(gameTime);
+
+            _fpsCounter.Update();
         }
 
         private void ConfigureOpenGl()
@@ -130,57 +111,46 @@ namespace VippGame.Core
             GL.DepthMask(true);
             GL.Disable(EnableCap.Lighting);
             GL.Disable(EnableCap.Texture2D);
-            GL.Viewport(0, 0, (int)_window.Size.X, (int)_window.Size.Y);
+            GL.Viewport(0, 0, Width, Height);
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
 
-            float ratio = _window.Size.X / (_window.Size.Y * 1.0F);
+            float ratio = Width / (Height * 1.0F);
             GL.Frustum(-ratio, ratio, -1, 1, 1, 500);
-        }
-
-        private ContextSettings GetContextSettings()
-        {
-            ContextSettings contextSettings = new ContextSettings
-            {
-                MajorVersion = 3,
-                MinorVersion = 1,
-                DepthBits = 24,
-                StencilBits = 8,
-                AntialiasingLevel = 4,
-                AttributeFlags = ContextSettings.Attribute.Debug
-            };
-
-            return contextSettings;
         }
 
         private void ConfigureEvents()
         {
-            _window.Closed += window_Closed;
-            _window.Resized += window_Resized;
-            _window.KeyPressed += window_KeyPressed;
+            Resize += GameEngine_Resize;
+            KeyPress += GameEngine_KeyPress;
+
+            UpdateFrame += GameEngine_UpdateFrame;
+            RenderFrame += GameEngine_RenderFrame;
         }
         #endregion
 
         #region [ Events ]
-        private void window_KeyPressed(object sender, KeyEventArgs e)
+        void GameEngine_RenderFrame(object sender, FrameEventArgs e)
         {
-            Window window = (Window)sender;
+            Draw();
+        }
 
-            if (e.Code == Keyboard.Key.Escape)
+        void GameEngine_UpdateFrame(object sender, FrameEventArgs e)
+        {
+            Update(_elapsedTime);
+        }
+
+        void GameEngine_Resize(object sender, EventArgs e)
+        {
+            GL.Viewport(0, 0, Width, Height);
+        }
+
+        void GameEngine_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Key.Escape)
             {
-                window.Close();
+                Close();
             }
-        }
-
-        private void window_Resized(object sender, SizeEventArgs e)
-        {
-            GL.Viewport(0, 0, (int)e.Width, (int)e.Height);
-        }
-
-        private void window_Closed(object sender, EventArgs e)
-        {
-            Window window = (Window)sender;
-            window.Close();
         }
         #endregion
     }
