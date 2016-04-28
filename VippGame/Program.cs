@@ -4,8 +4,6 @@
  * Date: 26/04/2016
  */
 
-using System;
-using OpenTK.Graphics;
 using VippGame.Core;
 
 namespace VippGame

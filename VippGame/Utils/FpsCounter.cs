@@ -1,8 +1,5 @@
-﻿using System.Drawing;
-using OpenTK.Graphics.OpenGL;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using SFML.System;
-using VippGame.Core;
 using VippGame.GLObjects;
 using Color = SFML.Graphics.Color;
 using Font = SFML.Graphics.Font;

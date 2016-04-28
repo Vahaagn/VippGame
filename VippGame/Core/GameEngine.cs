@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
 using VippGame.Shapes;
 using VippGame.Utils;
-using PrimitiveType = OpenTK.Graphics.OpenGL.PrimitiveType;
 
 namespace VippGame.Core
 {
@@ -36,8 +33,8 @@ namespace VippGame.Core
         #region [ Constructors ]
 
         public GameEngine()
-            : base(640, 480, GraphicsMode.Default, "Test",
-                GameWindowFlags.Default, DisplayDevice.Default, 3, 1,
+            : base(640, 480, new GraphicsMode(32, 24, 0, 4), "Test",
+                GameWindowFlags.Default, DisplayDevice.Default, 2, 1,
                 GraphicsContextFlags.Debug)
         {
             _gameClock = new Clock();

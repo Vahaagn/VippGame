@@ -1,5 +1,4 @@
 ﻿using System;
-using OpenTK.Graphics.OpenGL;
 using SFML.Graphics;
 using SFML.System;
 using VippGame.GLObjects;
