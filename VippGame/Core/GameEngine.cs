@@ -22,7 +22,7 @@ namespace VippGame.Core
         private InputManager _inputManager;
         private FpsCounter _fpsCounter;
         private ParticleSystem _particles;
-        private Cube _cube;
+        private CubeV2 _cube;
         #endregion
 
         #region [ Properties ]
@@ -32,10 +32,9 @@ namespace VippGame.Core
 
         #region [ Constructors ]
 
-        public GameEngine()
-            : base(640, 480, new GraphicsMode(32, 24, 0, 4), "Test",
-                GameWindowFlags.Default, DisplayDevice.Default, 2, 1,
-                GraphicsContextFlags.Debug)
+        public GameEngine(int width = 640, int height = 480, string title = "Vipp Game")
+            : base(width, height, new GraphicsMode(32, 24, 0, 4), title,
+                GameWindowFlags.Default, DisplayDevice.Default, 2, 1, GraphicsContextFlags.Debug)
         {
             _gameClock = new Clock();
             _loopClock = new Clock();
@@ -61,7 +60,7 @@ namespace VippGame.Core
             _inputManager = new InputManager();
             _fpsCounter = new FpsCounter(font);
             _particles = new ParticleSystem(_random, 100);
-            _cube = new Cube();
+            _cube = new CubeV2();
 
             Run(60);
         }
@@ -119,10 +118,18 @@ namespace VippGame.Core
         private void ConfigureEvents()
         {
             Resize += GameEngine_Resize;
-            KeyPress += GameEngine_KeyPress;
-
+            Closed += GameEngine_Closed;
+            
             UpdateFrame += GameEngine_UpdateFrame;
             RenderFrame += GameEngine_RenderFrame;
+
+            KeyPress += GameEngine_KeyPress;
+            KeyDown += GameEngine_KeyDown;
+        }
+
+        private void GameEngine_Closed(object sender, EventArgs e)
+        {
+            Close();
         }
         #endregion
 
@@ -144,7 +151,12 @@ namespace VippGame.Core
 
         void GameEngine_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)Key.Escape)
+            // Only working with alfa-numeric Keys!!
+        }
+
+        private void GameEngine_KeyDown(object sender, KeyboardKeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
             {
                 Close();
             }

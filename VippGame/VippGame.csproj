@@ -73,6 +73,7 @@
     <Compile Include="GLObjects\GLVertex.cs" />
     <Compile Include="GLObjects\Particle.cs" />
     <Compile Include="Core\ParticleSystem.cs" />
+    <Compile Include="Shapes\CubeV2.cs" />
     <Compile Include="Shapes\Plane.cs" />
     <Compile Include="GLObjects\GLText.cs" />
     <Compile Include="Program.cs" />
