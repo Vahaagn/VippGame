@@ -8,9 +8,13 @@ namespace VippGame.Shapes
     {
         private readonly Plane[] _planes;
 
-        public Cube()
+        public float Size { get; set; }
+
+        public Cube(float size = 50f)
         {
-            _planes = new Plane[4];
+            Size = size;
+
+            _planes = new Plane[6];
 
             Init();
         }
@@ -33,26 +37,47 @@ namespace VippGame.Shapes
 
         private void Init()
         {
-            for (int i = 0; i < _planes.Length; i++)
+            _planes[0] = new Plane(Color4.Aqua, "test1.jpg", Size)
             {
-                _planes[i] = new Plane(Color4.Aqua);
-            }
+                Angle = 90F,
+                Rotation = new Vector3(1, 0, 0),
+                Color = Color4.Aqua
+            };
 
-            _planes[0].Angle = 90F;
-            _planes[0].Rotation = new Vector3(1, 0, 0);
-            _planes[0].Color = Color4.Aqua;
+            _planes[1] = new Plane(Color4.Aqua, "test2.jpg", Size)
+            {
+                Angle = 90F,
+                Rotation = new Vector3(0, -1, 0),
+                Color = Color4.Magenta
+            };
 
-            _planes[1].Angle = 90F;
-            _planes[1].Rotation = new Vector3(0, -1, 0);
-            _planes[1].Color = Color4.Magenta;
+            _planes[2] = new Plane(Color4.Aqua, "test3.jpg", Size)
+            {
+                Angle = 180F,
+                Rotation = new Vector3(0, 1, 0),
+                Color = Color4.Green
+            };
 
-            _planes[2].Angle = 180F;
-            _planes[2].Rotation = new Vector3(0, 1, 0);
-            _planes[2].Color = Color4.Green;
+            _planes[3] = new Plane(Color4.Aqua, "test4.jpg", Size)
+            {
+                Angle = 90F,
+                Rotation = new Vector3(0, 0, 1),
+                Color = Color4.Blue
+            };
 
-            _planes[3].Angle = 90F;
-            _planes[3].Rotation = new Vector3(0, 0, 1);
-            _planes[3].Color = Color4.Blue;
+            _planes[4] = new Plane(Color4.Aqua, "test5.jpg", Size)
+            {
+                Angle = 90F,
+                Rotation = new Vector3(-1, 0, 0),
+                Color = Color4.Blue
+            };
+
+            _planes[5] = new Plane(Color4.Aqua, "test6.jpg", Size)
+            {
+                Angle = 90F,
+                Rotation = new Vector3(0, 1, 0),
+                Color = Color4.Blue
+            };
         }
     }
 }
