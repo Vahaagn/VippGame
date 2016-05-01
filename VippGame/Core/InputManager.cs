@@ -31,14 +31,17 @@ namespace VippGame.Core
         {
             if (_hasFirstClicked)
             {
-                GL.Rotate(velocity.X, axisX, 0.0f, 0.0f);
-                GL.Rotate(velocity.Y, 0.0f, axisY, 0.0f);
+                camera.Rotate(_velocity);
             }
+
+            camera.Zoom = _wheelPower;
         }
 
-        private Vector3 velocity = Vector3.Zero;
-        private float axisX = 0.0f;
-        private float axisY = 0.0f;
+        private Vector3 _velocity = Vector3.Zero;
+        private float _wheelPower = 1.0f;
+        private int _lastWheelValue = 0;
+        private float _maxWheelValue = 25.0f;
+        private float _wheelChange = 0.0f;
 
         private void HandleMouse(GameTime gameTime)
         {
@@ -59,23 +62,40 @@ namespace VippGame.Core
 
                     if (Math.Abs(diffX) > MAX_REST_DIFF)
                     {
-                        axisX = Math.Max(diffX * 0.05f, 1.0f);
-                        velocity.X = diffX * 0.5f;
+                        _velocity.X = diffX * 0.5f;
                     }
 
                     if (Math.Abs(diffY) > MAX_REST_DIFF)
                     {
-                        axisY = Math.Max(diffY * 0.05f, 1.0f);
-                        velocity.Y = diffY * 0.5f;
+                        _velocity.Y = diffY * 0.5f;
                     }
                 }
             }
-            else
+            
+            if (state.Wheel != _lastWheelValue)
             {
-                velocity = Vector3.Zero;
-                axisX = 0.0f;
-                axisY = 0.0f;
-                _hasFirstClicked = false;
+                var change = _wheelChange + state.Wheel - _lastWheelValue;
+                _lastWheelValue = state.Wheel;
+
+                if (Math.Abs(change) >= _maxWheelValue)
+                {
+                    return;
+                }
+
+                _wheelChange = change;
+
+                float addWheelValue = 1.0f;
+
+                if (_wheelChange > 0)
+                {
+                    addWheelValue -= Math.Min(1.0f, _wheelChange / _maxWheelValue);
+                }
+                else if (_wheelChange < 0)
+                {
+                    addWheelValue -= Math.Max(-1.0f, _wheelChange / _maxWheelValue);
+                }
+
+                _wheelPower = addWheelValue;
             }
         }
     }
