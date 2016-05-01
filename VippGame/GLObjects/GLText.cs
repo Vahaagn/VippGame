@@ -9,15 +9,15 @@ namespace VippGame.GLObjects
     {
         private readonly Bitmap _textBitmap;
         private readonly int _textureId;
-        private Size _clientSize;
 
+        public Size ClientSize { get; set; }
         public string Text { get; set; }
         public Font Font { get; set; }
 
         public GlText()
         {
             _textBitmap = new Bitmap(100, 50);
-            _clientSize = new Size(640, 480);
+            ClientSize = new Size(640, 480);
             _textureId = CreateTexture();
 
             Text = "Test";
@@ -52,7 +52,7 @@ namespace VippGame.GLObjects
             GL.PushMatrix();
             GL.LoadIdentity();
 
-            Matrix4 orthoProjection = Matrix4.CreateOrthographicOffCenter(0, _clientSize.Width, _clientSize.Height, 0, -1, 1);
+            Matrix4 orthoProjection = Matrix4.CreateOrthographicOffCenter(0, ClientSize.Width, ClientSize.Height, 0, -1, 1);
             GL.MatrixMode(MatrixMode.Projection);
 
             GL.PushMatrix();//

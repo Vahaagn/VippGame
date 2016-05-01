@@ -1,9 +1,9 @@
 ﻿using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using System.Drawing;
+using OpenTK.Graphics;
+using VippGame.Core;
 using PrimitiveType = OpenTK.Graphics.OpenGL.PrimitiveType;
-using Time = SFML.System.Time;
 
 namespace VippGame.GLObjects
 {
@@ -14,22 +14,25 @@ namespace VippGame.GLObjects
         private float _angle;
         private float _speed;
         private Vector3 _velocity;
-        private Time _lifeTime;
+        private TimeSpan _lifeTime;
 
         public Vector3 Position { get; set; }
-        public Color Color { get; set; }
+        public Color4 Color { get; set; }
 
-        public Particle(Random rand, Vector3? position = null, float size = 1.5f, Color? color = null)
+        public Particle(Random rand, Vector3? position = null, float size = 1.5f, Color4? color = null)
         {
             _rand = rand;
 
             _size = size;
             Position = position ?? Vector3.Zero;
-            Color = color ?? Color.White;
+            Color = color ?? Color4.White;
 
             Reset();
         }
 
+        /// <summary>
+        /// This method have it's own Matrix which is not being roated with camera
+        /// </summary>
         public void Draw()
         {
             GL.PushMatrix();
@@ -40,7 +43,7 @@ namespace VippGame.GLObjects
 
             GL.PushMatrix();//
             GL.LoadMatrix(ref orthoProjection);
-            
+
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
@@ -50,7 +53,7 @@ namespace VippGame.GLObjects
             GL.Begin(PrimitiveType.Points);
             GL.Vertex2(Position.Xy);
             GL.End();
-            
+
             GL.Disable(EnableCap.Blend);
 
             GL.PopMatrix();
@@ -73,19 +76,20 @@ namespace VippGame.GLObjects
             GL.Disable(EnableCap.Blend);
         }
 
-        public void Update(Time gameTime)
+        public void Update(GameTime gameTime)
         {
-            _lifeTime -= gameTime;
+            _lifeTime -= gameTime.ElapsedTime;
 
-            if (_lifeTime <= Time.Zero)
+            if (_lifeTime <= TimeSpan.Zero)
             {
                 Reset();
             }
 
-            Position += _velocity * gameTime.AsSeconds();
+            Position += _velocity * gameTime.DeltaTime;
 
-            float ratio = _lifeTime.AsSeconds() / 3f;
-            Color = Color.FromArgb((int) (ratio*255), Color);
+            // TODO: Something went wrong and now the alpha blending is not working properly!
+            float ratio = (float)_lifeTime.TotalSeconds / 3f;
+            Color = new Color4(Color.R, Color.G, Color.B, ratio * 255);
         }
 
         /// <summary>
@@ -96,9 +100,9 @@ namespace VippGame.GLObjects
             _angle = (float)(_rand.Next(0, 360) * Math.PI / 180f);
             _speed = _rand.Next(0, 50) + 50f;
 
-            _velocity = new Vector3((float)Math.Cos(_angle) * _speed, (float)Math.Sin(_angle) * _speed, (float)Math.Sin(_angle)*_speed);
-            _lifeTime = Time.FromMilliseconds(_rand.Next(1000, 3000));
-            Position = new Vector3(_rand.Next(-640, 640), _rand.Next(-480, 480), _rand.Next(-200, 200));
+            _velocity = new Vector3((float)Math.Cos(_angle) * _speed, (float)Math.Sin(_angle) * _speed, (float)Math.Sin(_angle) * _speed);
+            _lifeTime = TimeSpan.FromMilliseconds(_rand.Next(1000, 3000));
+            Position = new Vector3(_rand.Next(-1280, 1280), _rand.Next(-960, 960), _rand.Next(-400, 400));
         }
     }
 }

@@ -1,11 +1,7 @@
-﻿using SFML.Graphics;
-using SFML.System;
 ﻿using System.Drawing;
 using OpenTK.Graphics;
 using VippGame.Core;
 using VippGame.GLObjects;
-using Color = SFML.Graphics.Color;
-using Font = SFML.Graphics.Font;
 
 namespace VippGame.Utils
 {
@@ -14,21 +10,14 @@ namespace VippGame.Utils
         private const string FORMAT = "FPS: {0}";
 
         private int _fps;
-        private readonly Text _fpsText;
         private float _elapsedTime;
+        private readonly Color4 _color;
         private readonly GlText _textGl;
 
-        public FpsCounter(Font font, uint size = 12, Color? color = null, Text.Styles? styles = null)
+        public FpsCounter(uint size = 12, Color4? color = null)
         {
+            _color = color ?? Color4.Magenta;
             _textGl = new GlText();
-            _fpsText = new Text();
-
-            _fpsText.Font = font;
-            _fpsText.CharacterSize = size;
-            _fpsText.Color = color ?? Color.Magenta;
-            _fpsText.Style = styles ?? Text.Styles.Regular;
-            _fpsText.Position = new Vector2f(0, 0);
-
         }
 
         public void Draw()
@@ -50,6 +39,11 @@ namespace VippGame.Utils
             _textGl.UpdateText(text);
             _fps = 0;
             _elapsedTime = 0;
+        }
+
+        public void UpdateWindowSize(Size size)
+        {
+            _textGl.ClientSize = size;
         }
     }
 }

@@ -2,7 +2,6 @@
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
-using Time = SFML.System.Time;
 
 namespace VippGame.Core
 {
@@ -23,12 +22,12 @@ namespace VippGame.Core
 
         }
 
-        public void Update(Time gameTime)
+        public void Update(GameTime gameTime)
         {
             HandleMouse(gameTime);
         }
 
-        public void Draw()
+        public void Draw(Camera camera)
         {
             if (_hasFirstClicked)
             {
@@ -41,7 +40,7 @@ namespace VippGame.Core
         private float axisX = 0.0f;
         private float axisY = 0.0f;
 
-        private void HandleMouse(Time gameTime)
+        private void HandleMouse(GameTime gameTime)
         {
             MouseState state = Mouse.GetCursorState();
 

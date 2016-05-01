@@ -3,8 +3,6 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
-using SFML.Graphics;
-using SFML.System;
 using VippGame.Shapes;
 using VippGame.Utils;
 
@@ -13,7 +11,6 @@ namespace VippGame.Core
     public class GameEngine : GameWindow
     {
         #region [ Fields ]
-        //private RenderWindow _window;
         private readonly Random _random;
         private readonly GameTime _gameTime;
 
@@ -24,7 +21,7 @@ namespace VippGame.Core
         private InputManager _inputManager;
         private FpsCounter _fpsCounter;
         private ParticleSystem _particles;
-        private CubeV2 _cube;
+        private Cube _cube;
         #endregion
 
         #region [ Properties ]
@@ -33,7 +30,6 @@ namespace VippGame.Core
         #endregion
 
         #region [ Constructors ]
-
         public GameEngine(int width = 640, int height = 480, string title = "Vipp Game")
             : base(width, height, new GraphicsMode(32, 24, 0, 4), title,
                 GameWindowFlags.Default, DisplayDevice.Default, 2, 1, GraphicsContextFlags.Debug)
@@ -41,14 +37,13 @@ namespace VippGame.Core
             _random = new Random(DateTime.Now.Millisecond);
             _gameTime = new GameTime();
         }
-
         #endregion
 
         #region [ Public methods ]
         public void Init()
         {
             Context.MakeCurrent(WindowInfo);
-            
+
             ConfigureEvents();
         }
 
@@ -56,13 +51,11 @@ namespace VippGame.Core
         {
             ConfigureOpenGl();
 
-            var font = new Font(Resources.Fonts.consola);
-
             _camera = new Camera(Size) { Position = new Vector3(0, 0, 10), Target = new Vector3(0, 0, 0), Transformation = Vector3.UnitY };
             _inputManager = new InputManager();
-            _fpsCounter = new FpsCounter(font);
-            _particles = new ParticleSystem(_random, 100);
-            _cube = new CubeV2();
+            _fpsCounter = new FpsCounter();
+            _particles = new ParticleSystem(_random, 500);
+            _cube = new Cube(200);
 
             Run(60);
         }
@@ -72,7 +65,6 @@ namespace VippGame.Core
         private void Draw()
         {
             DrawOpenGl();
-
             SwapBuffers();
 
             _gameTime.Restart();
@@ -81,12 +73,14 @@ namespace VippGame.Core
         private void DrawOpenGl()
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            GL.Enable(EnableCap.Lighting);
+            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.Texture2D);
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
             GL.Translate(0.0F, 0.0F, -200.0F);
 
-            _inputManager.Draw();
             _camera.Update(_gameTime);
             _inputManager.Draw(_camera);
 
@@ -108,8 +102,8 @@ namespace VippGame.Core
             GL.ClearColor(0, 0, 0, 1);
             GL.Enable(EnableCap.DepthTest);
             GL.DepthMask(true);
-            GL.Disable(EnableCap.Lighting);
-            GL.Disable(EnableCap.Texture2D);
+            //GL.Disable(EnableCap.Lighting);
+            //GL.Disable(EnableCap.Texture2D);
             GL.Viewport(0, 0, Width, Height);
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
@@ -122,21 +116,21 @@ namespace VippGame.Core
         {
             Resize += GameEngine_Resize;
             Closed += GameEngine_Closed;
-            
+
             UpdateFrame += GameEngine_UpdateFrame;
             RenderFrame += GameEngine_RenderFrame;
 
             KeyPress += GameEngine_KeyPress;
             KeyDown += GameEngine_KeyDown;
         }
-
-        private void GameEngine_Closed(object sender, EventArgs e)
-        {
-            Close();
-        }
         #endregion
 
         #region [ Events ]
+        private void GameEngine_Closed(object sender, EventArgs e)
+        {
+            Exit();
+        }
+
         void GameEngine_RenderFrame(object sender, FrameEventArgs e)
         {
             Draw();
@@ -151,6 +145,7 @@ namespace VippGame.Core
         {
             GL.Viewport(0, 0, Width, Height);
             _camera.ScreenSize = Size;
+            _fpsCounter.UpdateWindowSize(Size);
         }
 
         void GameEngine_KeyPress(object sender, KeyPressEventArgs e)
