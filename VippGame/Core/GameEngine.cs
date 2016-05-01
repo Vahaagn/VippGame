@@ -14,10 +14,9 @@ namespace VippGame.Core
     {
         #region [ Fields ]
         //private RenderWindow _window;
-        private readonly Clock _gameClock;
-        private readonly Clock _loopClock;
         private readonly Random _random;
-        private Time _elapsedTime;
+        private readonly GameTime _gameTime;
+
         private Matrix4 modelviewMatrix, projectionMatrix;
         private Matrix4 rotationviewMatrix;
 
@@ -39,9 +38,8 @@ namespace VippGame.Core
             : base(width, height, new GraphicsMode(32, 24, 0, 4), title,
                 GameWindowFlags.Default, DisplayDevice.Default, 2, 1, GraphicsContextFlags.Debug)
         {
-            _gameClock = new Clock();
-            _loopClock = new Clock();
             _random = new Random(DateTime.Now.Millisecond);
+            _gameTime = new GameTime();
         }
 
         #endregion
@@ -77,7 +75,7 @@ namespace VippGame.Core
 
             SwapBuffers();
 
-            _elapsedTime = _loopClock.Restart();
+            _gameTime.Restart();
         }
 
         private void DrawOpenGl()
@@ -97,12 +95,11 @@ namespace VippGame.Core
             _fpsCounter.Draw();
         }
 
-        private void Update(Time gameTime)
+        private void Update(GameTime gameTime)
         {
             _inputManager.Update(gameTime);
             _particles.Update(gameTime);
-
-            _fpsCounter.Update();
+            _fpsCounter.Update(gameTime);
         }
 
         private void ConfigureOpenGl()
@@ -147,7 +144,7 @@ namespace VippGame.Core
 
         void GameEngine_UpdateFrame(object sender, FrameEventArgs e)
         {
-            Update(_elapsedTime);
+            Update(_gameTime);
         }
 
         void GameEngine_Resize(object sender, EventArgs e)

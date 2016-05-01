@@ -1,8 +1,8 @@
 ﻿using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using VippGame.Core;
 using VippGame.GLObjects;
-using Time = SFML.System.Time;
 
 namespace VippGame.Shapes
 {
@@ -53,7 +53,7 @@ namespace VippGame.Shapes
             GL.PopMatrix();
         }
 
-        public void Update(Time gameTime)
+        public void Update(GameTime gameTime)
         {
 
         }

@@ -1,6 +1,6 @@
 ﻿using OpenTK;
 using OpenTK.Graphics;
-using Time = SFML.System.Time;
+using VippGame.Core;
 
 namespace VippGame.Shapes
 {
@@ -23,7 +23,7 @@ namespace VippGame.Shapes
             }
         }
 
-        public void Update(Time gameTime)
+        public void Update(GameTime gameTime)
         {
             foreach (var plane in _planes)
             {
