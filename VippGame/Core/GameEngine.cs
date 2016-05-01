@@ -18,7 +18,10 @@ namespace VippGame.Core
         private readonly Clock _loopClock;
         private readonly Random _random;
         private Time _elapsedTime;
+        private Matrix4 modelviewMatrix, projectionMatrix;
+        private Matrix4 rotationviewMatrix;
 
+        private Camera _camera;
         private InputManager _inputManager;
         private FpsCounter _fpsCounter;
         private ParticleSystem _particles;
@@ -57,6 +60,7 @@ namespace VippGame.Core
 
             var font = new Font(Resources.Fonts.consola);
 
+            _camera = new Camera(Size) { Position = new Vector3(0, 0, 10), Target = new Vector3(0, 0, 0), Transformation = Vector3.UnitY };
             _inputManager = new InputManager();
             _fpsCounter = new FpsCounter(font);
             _particles = new ParticleSystem(_random, 100);
@@ -85,6 +89,8 @@ namespace VippGame.Core
             GL.Translate(0.0F, 0.0F, -200.0F);
 
             _inputManager.Draw();
+            _camera.Update(_gameTime);
+            _inputManager.Draw(_camera);
 
             _cube.Draw();
             _particles.Draw();
@@ -147,6 +153,7 @@ namespace VippGame.Core
         void GameEngine_Resize(object sender, EventArgs e)
         {
             GL.Viewport(0, 0, Width, Height);
+            _camera.ScreenSize = Size;
         }
 
         void GameEngine_KeyPress(object sender, KeyPressEventArgs e)
