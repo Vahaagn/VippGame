@@ -86,8 +86,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Fonts.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Console.cs" />
     <Compile Include="Utils\Converters.cs" />
     <Compile Include="Utils\FpsCounter.cs" />
+    <Compile Include="Utils\GLE.cs" />
+    <Compile Include="Utils\GLHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
