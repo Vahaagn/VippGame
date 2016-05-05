@@ -1,23 +1,41 @@
 ﻿using OpenTK;
 using OpenTK.Graphics;
 using VippGame.Core;
+using VippGame.Core.Interfaces;
 
 namespace VippGame.Shapes
 {
-    public class Cube
+    public class Cube : IGameObject
     {
+        #region --- Fields ---
+
         private readonly Plane[] _planes;
 
+        #endregion
+
+        #region --- Properties ---
+
         public float Size { get; set; }
+        #endregion
+
+        #region --- Constructors ---
 
         public Cube(float size = 50f)
         {
+            Id = IdentifierProvider.GetAvailableId();
+
             Size = size;
 
             _planes = new Plane[6];
 
             Init();
         }
+
+        #endregion
+
+        #region --- IGameObject Members ---
+
+        public int Id { get; }
 
         public void Draw()
         {
@@ -34,6 +52,10 @@ namespace VippGame.Shapes
                 plane.Update(gameTime);
             }
         }
+
+        #endregion
+
+        #region --- Public methods ---
 
         private void Init()
         {
@@ -79,5 +101,7 @@ namespace VippGame.Shapes
                 Color = Color4.Blue
             };
         }
+
+        #endregion
     }
 }

@@ -1,42 +1,24 @@
-﻿using System;
+﻿#region --- Header ---
+// File: MouseController.cs
+// Original Project: VippGame
+// Original Solution: VippGame
+// ------------------------------
+// Created by: Mateusz Giza
+// Created on: 2016/05/03
+#endregion
+
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
+using System;
 
 namespace VippGame.Core
 {
-    public class InputManager
+    public class MouseController
     {
-        private const float MAX_REST_DIFF = 1f;
+        private const float MAX_REST_DIFF = 0f;
 
         private bool _hasFirstClicked;
         private MouseState _mouseStartState;
-
-        public InputManager()
-        {
-            Init();
-        }
-
-        private void Init()
-        {
-
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            HandleMouse(gameTime);
-        }
-
-        public void Draw(Camera camera)
-        {
-            if (_hasFirstClicked)
-            {
-                camera.Rotate(_velocity);
-            }
-
-            camera.Zoom = _wheelPower;
-        }
-
         private Vector3 _velocity = Vector3.Zero;
         private float _wheelPower = 1.0f;
         private int _lastWheelValue = 0;
@@ -71,7 +53,7 @@ namespace VippGame.Core
                     }
                 }
             }
-            
+
             if (state.Wheel != _lastWheelValue)
             {
                 var change = _wheelChange + state.Wheel - _lastWheelValue;
@@ -98,5 +80,8 @@ namespace VippGame.Core
                 _wheelPower = addWheelValue;
             }
         }
+
+        public event EventHandler<MouseButtonEventArgs> MouseButtonDown;
+        public event EventHandler<MouseMoveEventArgs> MouseMove;
     }
 }

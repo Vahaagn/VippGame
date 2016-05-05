@@ -1,6 +1,6 @@
-﻿using System;
-using System.Diagnostics;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
+using System;
+using System.Text;
 
 namespace VippGame.Core
 {
@@ -15,6 +15,13 @@ namespace VippGame.Core
 
         public ShaderProgram(ShaderType type, string code)
         {
+            var shader = new Shader(type, code);
+            CreateAndLink(shader);
+        }
+
+        public ShaderProgram(ShaderType type, byte[] file)
+        {
+            var code = Encoding.UTF8.GetString(file);
             var shader = new Shader(type, code);
             CreateAndLink(shader);
         }
@@ -41,7 +48,7 @@ namespace VippGame.Core
             }
 
             GL.LinkProgram(Handle);
-            
+
             foreach (var shader in shaders)
             {
                 string programInfoLog;

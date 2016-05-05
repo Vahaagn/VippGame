@@ -48,9 +48,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Builders\CubeBuilder.cs" />
+    <Compile Include="Core\Builders\ParticleSystemBuilder.cs" />
     <Compile Include="Core\Camera.cs" />
+    <Compile Include="Core\Controllers\MouseController.cs" />
     <Compile Include="Core\GameTime.cs" />
-    <Compile Include="Core\InputManager.cs" />
+    <Compile Include="Core\Providers\IdentifierProvider.cs" />
+    <Compile Include="Core\Controllers\InputController.cs" />
+    <Compile Include="Core\Interfaces\IDrawable.cs" />
+    <Compile Include="Core\Interfaces\IGameObject.cs" />
+    <Compile Include="Core\Interfaces\IUpdatable.cs" />
+    <Compile Include="Core\Managers\ObjectManager.cs" />
+    <Compile Include="Core\Providers\RandomProvider.cs" />
+    <Compile Include="Core\Services\InputService.cs" />
     <Compile Include="Core\Shader.cs" />
     <Compile Include="Core\ShaderProgram.cs" />
     <Compile Include="Resources\Shaders.Designer.cs">
@@ -93,7 +103,7 @@
       <LastGenOutput>Fonts.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Shaders.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Shaders.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
@@ -101,6 +111,7 @@
     <None Include="Resources\FXAA.vert" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Camera.vert" />
     <Content Include="Resources\Textures\test1.jpg" />
     <Content Include="Resources\Textures\test2.jpg" />
     <Content Include="Resources\Textures\test22.jpg" />

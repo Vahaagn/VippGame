@@ -1,66 +1,116 @@
-﻿using System;
-using System.Drawing;
-using OpenTK;
+﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using System.Drawing;
+using VippGame.Resources;
 
 namespace VippGame.Core
 {
     public class Camera
     {
+        #region --- Fields ---
+
+        private Matrix4 _modelMatrix;
+        private Matrix4 _viewMatrix;
+        private Matrix4 _projectionMatrix;
+
+        private Vector3 _rotation;
+
+        #endregion
+
+        #region --- Properties ---
+
         public Vector3 Position { get; set; }
         public Vector3 Target { get; set; }
         public Vector3 Transformation { get; set; }
         public Size ScreenSize { get; set; }
         public float Zoom { get; set; }
 
+        public float AspectRatio => ScreenSize.Width / 1.0F * ScreenSize.Height;
+        public float Fov => MathHelper.DegreesToRadians(60);
+
+        public Matrix4 ModelMatrix
+        {
+            get { return _modelMatrix; }
+            set { _modelMatrix = value; }
+        }
+
+        public Matrix4 ViewMatrix
+        {
+            get { return _viewMatrix; }
+            set { _viewMatrix = value; }
+        }
+
+        public Matrix4 ProjectionMatrix
+        {
+            get { return _projectionMatrix; }
+            set { _projectionMatrix = value; }
+        }
+
+        public ShaderProgram ShaderProgram { get; }
+
+        #endregion
+
+        #region --- Constructors ---
+
         public Camera(Size? screenSize = null)
         {
             ScreenSize = screenSize ?? new Size(640, 480);
             Zoom = 1.0f;
+
+            var shaders = new Shader[]
+            {
+                new Shader(ShaderType.VertexShader, Shaders.Camera_Vertex)
+            };
+            ShaderProgram = new ShaderProgram(shaders);
+            ShaderProgram.Use();
+
+            _modelMatrix = Matrix4.Identity;
+            _viewMatrix = Matrix4.Identity;
+            _projectionMatrix = Matrix4.Identity;
+        }
+
+        #endregion
+
+        #region --- Public methods ---
+
+        public void Rotate(Vector3 velocity)
+        {
+            //_rotation = velocity;
+
+            //GL.Rotate(_rotation.X, 1.0F, 0.0f, 0.0f);
+            //GL.Rotate(_rotation.Y, 0.0f, 1.0F, 0.0f);
         }
 
         public void Update(GameTime gameTime)
         {
-            CalculateAndProject();
-        }
-
-        private Vector3 _rotation;
-
-        public void Rotate(Vector3 velocity)
-        {
-            _rotation = velocity;
-
-            GL.Rotate(_rotation.X, 1.0F, 0.0f, 0.0f);
-            GL.Rotate(_rotation.Y, 0.0f, 1.0F, 0.0f);
-        }
-
-        private void CalculateAndProject()
-        {
-            var aspect = ScreenSize.Width / (float)ScreenSize.Height;
-
-            //if (orthoView)
-            //{
-            //    GL.MatrixMode(MatrixMode.Projection);
-            //    GL.LoadIdentity();
-            //    GL.Ortho(-r * aspect, r * aspect, -r, r, -100, 100);
-            //}
-
-            //else
-            //{
-            //Matrix4 perspective = Matrix4.Perspective(60, aspect, 1, 10000);
-            //Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(90), aspect, 1, 1000);
-            Matrix4 perspective = Matrix4.CreatePerspectiveOffCenter(-Zoom * aspect, Zoom * aspect, -Zoom, Zoom, 1, 10000);
-            Matrix4 lookat = Matrix4.LookAt(Position, Target, Transformation);
+            CalculateModelViewProjection();
 
             GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadIdentity();
-            GL.MultMatrix(ref perspective);
+            GL.LoadMatrix(ref _projectionMatrix);
 
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
-            GL.MultMatrix(ref lookat);
-            //GL.LoadMatrix(ref lookat);
-            //}
+            GL.PolygonMode(MaterialFace.Front, PolygonMode.Line);
+
+            //GL.Rotate(RotationX, 1, 0, 0);
+            //GL.Rotate(RotationY, 0, 1, 0);
+            //GL.Rotate(RotationZ, 0, 0, 1);
+            //GL.Translate(-X, -Y, -Z);
         }
+
+        private void CalculateModelViewProjection()
+        {
+            var modelPosition = GL.GetUniformLocation(ShaderProgram.Handle, nameof(ModelMatrix));
+            var viewPosition = GL.GetUniformLocation(ShaderProgram.Handle, nameof(ViewMatrix));
+            var projectionPosition = GL.GetUniformLocation(ShaderProgram.Handle, nameof(ProjectionMatrix));
+
+            _projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(Fov, AspectRatio, 0.1f, 100.0f);
+            _viewMatrix = Matrix4.LookAt(new Vector3(4, 3, 3), Vector3.Zero, Vector3.UnitY);
+            _modelMatrix = Matrix4.Identity;
+
+            GL.UniformMatrix4(modelPosition, false, ref _modelMatrix);
+            GL.UniformMatrix4(viewPosition, false, ref _viewMatrix);
+            GL.UniformMatrix4(projectionPosition, false, ref _projectionMatrix);
+        }
+
+        #endregion
     }
 }

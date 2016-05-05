@@ -1,8 +1,8 @@
-﻿using System.Drawing;
-using System.Drawing.Imaging;
-using OpenTK;
+﻿using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using System.Drawing;
+using System.Drawing.Imaging;
 using VippGame.Core;
 using VippGame.GLObjects;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
@@ -29,7 +29,6 @@ namespace VippGame.Shapes
         {
             _vertices = new GlVertex[4];
             _indices = new uint[] { 0, 1, 2, 3 };
-
             Color = color ?? Color4.Magenta;
             Size = size;
 
@@ -127,12 +126,12 @@ namespace VippGame.Shapes
 
         void CreateShaders()
         {
-            _shaderProgram = new ShaderProgram(ShaderType.FragmentShader, fragmentShaderSource);
+            _shaderProgram = new ShaderProgram(ShaderType.FragmentShader, FragmentShaderSource);
             _shaderProgram.Use();
         }
 
         #region [ Shaders ]
-        string fragmentShaderSource = @"
+        private const string FragmentShaderSource = @"
 #version 150
 uniform sampler2D MyTexture0;
  
