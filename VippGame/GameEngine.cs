@@ -14,6 +14,7 @@ namespace VippGame
         private WorldLoader _worldLoader;
         private Texture2D _dirt1;
         private Camera _camera;
+        private InputController _inputController;
 
         public GameEngine()
         {
@@ -40,6 +41,7 @@ namespace VippGame
                 Rotation = 0f,
                 Zoom = 1f
             };
+            _inputController = new InputController(Window, _camera);
 
             base.Initialize();
         }
@@ -77,6 +79,7 @@ namespace VippGame
                 Exit();
 
             // TODO: Add your update logic here
+            _inputController.Update();
 
             base.Update(gameTime);
         }

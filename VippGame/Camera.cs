@@ -7,6 +7,8 @@ namespace VippGame
         public Vector3 Position { get; set; }
         public float Zoom { get; set; }
         public float Rotation { get; set; }
+        public float MinZoom = 1f;
+        public float MaxZoom = 5f;
 
         public Matrix TranslationMatrix
         {
@@ -19,6 +21,22 @@ namespace VippGame
 
                 return f * g * h * i;
             }
+        }
+
+        public void ChangeZoom(float difference)
+        {
+            var cameraZoomChange = difference / 1000f;
+            if (CanZoom(cameraZoomChange))
+            {
+                Zoom += cameraZoomChange;
+            }
+        }
+
+        public bool CanZoom(float difference)
+        {
+            var newValue = Zoom + difference;
+
+            return newValue >= MinZoom && newValue <= MaxZoom;
         }
     }
 }
