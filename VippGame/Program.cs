@@ -1,20 +1,20 @@
-﻿/*
- * Name: VippGame
- * Author: Mateusz Giza
- * Date: 26/04/2016
- */
-
-using VippGame.Core;
+﻿using System;
 
 namespace VippGame
 {
-    class Program
+    /// <summary>
+    /// The main class.
+    /// </summary>
+    public static class Program
     {
-        static void Main(string[] args)
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
         {
-            GameEngine gameEngine = new GameEngine { ShowFps = true, WindowTitle = "Vipp Game" };
-            gameEngine.Init();
-            gameEngine.Start();
+            using (var game = new GameEngine())
+                game.Run();
         }
     }
 }
