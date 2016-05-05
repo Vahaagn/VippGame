@@ -13,8 +13,11 @@ namespace VippGame
         private SpriteBatch _spriteBatch;
         private WorldLoader _worldLoader;
         private Texture2D _dirt1;
+        private Texture2D _dirt2;
+        private Texture2D _dirt3;
         private Camera _camera;
         private InputController _inputController;
+        private Player _player;
 
         public GameEngine()
         {
@@ -34,14 +37,17 @@ namespace VippGame
         {
             // TODO: Add your initialization logic here
             var worldSize = new Point(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+            var centerScreen = new Vector2(worldSize.X / 2f, worldSize.Y / 2f);
+
             _worldLoader = new WorldLoader(worldSize);
             _camera = new Camera()
             {
-                Position = new Vector3(worldSize.X/2f, worldSize.Y/2f, 0),
+                Position = new Vector3(centerScreen, 0),
                 Rotation = 0f,
                 Zoom = 1f
             };
-            _inputController = new InputController(Window, _camera);
+            _player = new Player() { Color = Color.White, Position = centerScreen };
+            _inputController = new InputController(Window, _camera, _player);
 
             base.Initialize();
         }
@@ -54,7 +60,10 @@ namespace VippGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _dirt1 = Content.Load<Texture2D>("dirt1");
+            _dirt1 = Content.Load<Texture2D>("Textures/dirt1");
+            _dirt2 = Content.Load<Texture2D>("Textures/dirt2");
+            _dirt3 = Content.Load<Texture2D>("Textures/dirt3");
+            _player.Texture = Content.Load<Texture2D>("Player/player1");
 
             // TODO: use this.Content to load your game content here
         }
@@ -78,8 +87,10 @@ namespace VippGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
             _inputController.Update();
+            _player.Update(gameTime);
+
+            _camera.LookAt(_player);
 
             base.Update(gameTime);
         }
@@ -91,13 +102,11 @@ namespace VippGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
-            //var transformMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60), 4/3f, 0.1f, 100f);
-
             _spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null, _camera.TranslationMatrix);
-            //spriteBatch.Draw(_dirt1, Vector2.One, null, Color.White, 0f, Vector2.One, 2f, SpriteEffects.None, 1f);
-            _worldLoader.Draw(_spriteBatch, _dirt1);
+
+            _worldLoader.Draw(_spriteBatch, _dirt1, _dirt2, _dirt3);
+            _player.Draw(_spriteBatch);
+
             _spriteBatch.End();
 
             base.Draw(gameTime);

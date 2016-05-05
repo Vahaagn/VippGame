@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace VippGame
 {
@@ -41,14 +41,13 @@ namespace VippGame
             {
                 for (int j = 0; j < _worldData.GetLength(1); ++j)
                 {
-                    var n = _rand.Next(0, 255);
-                    var f = n%2 == 0 ? 0 : 1;
-                    _worldData[i, j] = (byte) f;
+                    var n = _rand.Next(0, 3);
+                    _worldData[i, j] = (byte)n;
                 }
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Texture2D texture2)
+        public void Draw(SpriteBatch spriteBatch, params Texture2D[] textures)
         {
             for (int i = 0; i < _worldData.GetLength(0); ++i)
             {
@@ -59,7 +58,9 @@ namespace VippGame
                         continue;
                     }
 
-                    spriteBatch.Draw(texture2, new Vector2(j * _tileSize * _scale, i * _tileSize * _scale), null, Color.White, 0f, Vector2.Zero, _scale, SpriteEffects.None, 1f);
+                    var randomIndex = (int)_worldData[i, j];
+
+                    spriteBatch.Draw(textures[randomIndex], new Vector2(j * _tileSize * _scale, i * _tileSize * _scale), null, Color.White, 0f, Vector2.Zero, _scale, SpriteEffects.None, 1f);
                 }
             }
         }

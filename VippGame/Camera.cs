@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using VippGame.Helpers;
 
 namespace VippGame
 {
@@ -14,7 +15,7 @@ namespace VippGame
         {
             get
             {
-                var f = Matrix.CreateTranslation(-(int)Position.X, -(int)Position.Y, 0);
+                var f = Matrix.CreateTranslation(-Position.X, -Position.Y, 0);
                 var g = Matrix.CreateRotationZ(Rotation);
                 var h = Matrix.CreateScale(new Vector3(Zoom, Zoom, 1));
                 var i = Matrix.CreateTranslation(new Vector3(Position.X, Position.Y, 0));
@@ -37,6 +38,11 @@ namespace VippGame
             var newValue = Zoom + difference;
 
             return newValue >= MinZoom && newValue <= MaxZoom;
+        }
+
+        public void LookAt(IGameObject gameObject)
+        {
+            Position = gameObject.Position.ToVector3();
         }
     }
 }
