@@ -8,7 +8,7 @@ namespace VippGame
     {
         private byte[,] _worldData;
         private readonly int _tileSize;
-        private float _scale = 5f;
+        private float _scale = 1f;
         private Random _rand;
         private Point _size;
 

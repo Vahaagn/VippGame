@@ -9,17 +9,16 @@ namespace VippGame
     /// </summary>
     public class GameEngine : Game
     {
-        private GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
-        private Texture2D _dirt1;
+        private readonly GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
         private WorldLoader _worldLoader;
+        private Texture2D _dirt1;
+        private Camera _camera;
 
         public GameEngine()
         {
-            graphics = new GraphicsDeviceManager(this);
-            //graphics.PreferredBackBufferWidth = 1280;
-            //graphics.PreferredBackBufferHeight = 720;
-            //graphics.ApplyChanges();
+            _graphics = new GraphicsDeviceManager(this);
+            IsMouseVisible = true;
 
             Content.RootDirectory = "Content";
         }
@@ -33,8 +32,14 @@ namespace VippGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            var worldSize = new Point(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            var worldSize = new Point(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
             _worldLoader = new WorldLoader(worldSize);
+            _camera = new Camera()
+            {
+                Position = new Vector3(worldSize.X/2f, worldSize.Y/2f, 0),
+                Rotation = 0f,
+                Zoom = 1f
+            };
 
             base.Initialize();
         }
@@ -46,7 +51,7 @@ namespace VippGame
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
             _dirt1 = Content.Load<Texture2D>("dirt1");
 
             // TODO: use this.Content to load your game content here
@@ -87,10 +92,10 @@ namespace VippGame
             // TODO: Add your drawing code here
             //var transformMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60), 4/3f, 0.1f, 100f);
 
-            spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            _spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null, _camera.TranslationMatrix);
             //spriteBatch.Draw(_dirt1, Vector2.One, null, Color.White, 0f, Vector2.One, 2f, SpriteEffects.None, 1f);
-            _worldLoader.Draw(spriteBatch, _dirt1);
-            spriteBatch.End();
+            _worldLoader.Draw(_spriteBatch, _dirt1);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
