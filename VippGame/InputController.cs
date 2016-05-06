@@ -39,16 +39,16 @@ namespace VippGame
                 switch (pressedKey)
                 {
                     case Keys.A:
-                        _player.Position = new Vector2(_player.Position.X - 1, _player.Position.Y);
+                        _player.Move(-1, 0);
                         break;
                     case Keys.D:
-                        _player.Position = new Vector2(_player.Position.X + 1, _player.Position.Y);
+                        _player.Move(1, 0);
                         break;
                     case Keys.W:
-                        _player.Position = new Vector2(_player.Position.X, _player.Position.Y - 1);
+                        _player.Move(0, -1);
                         break;
                     case Keys.S:
-                        _player.Position = new Vector2(_player.Position.X, _player.Position.Y + 1);
+                        _player.Move(0, 1);
                         break;
                 }
             }

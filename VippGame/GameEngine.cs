@@ -49,6 +49,10 @@ namespace VippGame
             _player = new Player() { Color = Color.White, Position = centerScreen };
             _inputController = new InputController(Window, _camera, _player);
 
+            _graphics.PreferredBackBufferWidth = 800;
+            _graphics.PreferredBackBufferHeight = 480;
+            //GraphicsDevice.Viewport = new Viewport(0, 0, 4000, 2000);
+
             base.Initialize();
         }
 

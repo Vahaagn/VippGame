@@ -15,7 +15,12 @@ namespace VippGame
     public class Player : IGameObject
     {
         public Vector2 Position { get; set; }
-        public Point Size => new Point(Texture.Width, Texture.Height);
+
+        public Point Size
+        {
+            get { return new Point(Texture.Width, Texture.Height); }
+        }
+
         public Texture2D Texture { get; set; }
         public Color Color { get; set; }
 
@@ -32,6 +37,16 @@ namespace VippGame
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Texture, new Rectangle(Position.ToPoint(), Size), Color);
+        }
+
+        public void Move(float xChange, float yChange)
+        {
+            Move(new Vector2(xChange, yChange));
+        }
+
+        public void Move(Vector2 changeVector)
+        {
+            Position += changeVector;
         }
     }
 }

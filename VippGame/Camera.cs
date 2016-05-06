@@ -31,6 +31,14 @@ namespace VippGame
             {
                 Zoom += cameraZoomChange;
             }
+            else if (Zoom + cameraZoomChange > MaxZoom)
+            {
+                Zoom = MaxZoom;
+            }
+            else if (Zoom + cameraZoomChange < MinZoom)
+            {
+                Zoom = MinZoom;
+            }
         }
 
         public bool CanZoom(float difference)
