@@ -1,6 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
+using MonoGame.Extended.ViewportAdapters;
+using VippGame.Core.Controller;
+using VippGame.Core.Entities;
 using VippGame.Core.Managers;
 
 namespace VippGame
@@ -22,6 +26,7 @@ namespace VippGame
         public GameEngine()
         {
             _graphics = new GraphicsDeviceManager(this);
+
             IsMouseVisible = true;
 
             Content.RootDirectory = "Content";
@@ -37,25 +42,38 @@ namespace VippGame
         {
             _objectManager = new ObjectManager();
 
-            var worldSize = new Point(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+            var worldSize = new Point(5000, 5000);
             var centerScreen = new Vector2(worldSize.X / 2f, worldSize.Y / 2f);
 
             _worldLoader = new WorldLoader(worldSize);
-            var camera = new Camera()
-            {
-                Position = centerScreen,
-                Rotation = 0f,
-                Zoom = 1f
-            };
+            //var camera = new Camera()
+            //{
+            //    Position = centerScreen,
+            //    Rotation = 0f,
+            //    Zoom = 1f,
+            //    ViewPort = GraphicsDevice.Viewport
+            //};
+            var viewportAdapter = new BoxingViewportAdapter(Window, _graphics, worldSize.X, worldSize.Y);
+            var camera = new Camera2D(viewportAdapter) { Zoom = 5f };
             var player = new Player() { Color = Color.White, Position = centerScreen };
+            var cubes = new[]
+            {
+                new Cube(50, 50),
+                new Cube(100, 50),
+                new Cube(150, 50),
+                new Cube(50, 100),
+                new Cube(50, 150),
+            };
+
             _inputController = new InputController(Window, camera, player);
 
-            _objectManager.Add(player, camera);
+            _objectManager.AddCamera(camera);
+            _objectManager.Add(player);
+            foreach (var cube in cubes)
+            {
+                _objectManager.Add(cube);
+            }
             _objectManager.Initialize();
-
-            _graphics.PreferredBackBufferWidth = 800;
-            _graphics.PreferredBackBufferHeight = 480;
-            //GraphicsDevice.Viewport = new Viewport(0, 0, 4000, 2000);
 
             base.Initialize();
         }
@@ -98,8 +116,7 @@ namespace VippGame
 
             _objectManager.Update(gameTime);
 
-            _objectManager.GetCamera()
-                .LookAt(_objectManager.GetPlayer());
+            _objectManager.GetCamera().LookAt(_objectManager.GetPlayer().Position);
 
             base.Update(gameTime);
         }
@@ -112,9 +129,9 @@ namespace VippGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null,
-                _objectManager.GetCamera().TranslationMatrix);
+                _objectManager.GetCamera().GetViewMatrix());
 
-            _worldLoader.Draw(_spriteBatch, _dirt1, _dirt2, _dirt3);
+            _worldLoader.Draw(_spriteBatch, _objectManager.GetCamera().GetBoundingRectangle(), _dirt1, _dirt2, _dirt3);
 
             _objectManager.Draw(_spriteBatch);
 

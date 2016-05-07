@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Shapes;
 using System;
 
-namespace VippGame
+namespace VippGame.Core.Managers
 {
     public class WorldLoader
     {
@@ -47,7 +48,7 @@ namespace VippGame
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, params Texture2D[] textures)
+        public void Draw(SpriteBatch spriteBatch, RectangleF viewport, params Texture2D[] textures)
         {
             for (int i = 0; i < _worldData.GetLength(0); ++i)
             {
@@ -58,9 +59,13 @@ namespace VippGame
                         continue;
                     }
 
+                    var pos = new Vector2(j * _tileSize, i * _tileSize);
+                    var box = new RectangleF(pos, new Vector2(_tileSize, _tileSize));
+                    if (!viewport.Intersects(box)) continue;
+
                     var randomIndex = (int)_worldData[i, j];
 
-                    spriteBatch.Draw(textures[randomIndex], new Vector2(j * _tileSize * _scale, i * _tileSize * _scale), null, Color.White, 0f, Vector2.Zero, _scale, SpriteEffects.None, 1f);
+                    spriteBatch.Draw(textures[randomIndex], pos, null, Color.White, 0f, Vector2.Zero, _scale, SpriteEffects.None, 1f);
                 }
             }
         }

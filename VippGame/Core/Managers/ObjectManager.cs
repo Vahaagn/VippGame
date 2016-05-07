@@ -10,6 +10,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using System.Collections.Generic;
 using System.Linq;
 using VippGame.Core.Interfaces;
@@ -20,10 +21,16 @@ namespace VippGame.Core.Managers
     public class ObjectManager
     {
         private readonly List<IObject> _objects;
+        private Camera2D _camera;
 
         public ObjectManager()
         {
             _objects = new List<IObject>();
+        }
+
+        public void AddCamera(Camera2D camera)
+        {
+            _camera = camera;
         }
 
         public void Add(params IObject[] objects)
@@ -58,14 +65,30 @@ namespace VippGame.Core.Managers
             _objects.OfType<IUpdatable>()
                 .AsParallel()
                 .ForAll(obj => obj.Update(gameTime));
+
+            CheckCollisions();
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _objects.OfType<IDrawable>()
-                .Where(obj => obj.Visible)
-                .AsParallel()
-                .ForAll(obj => obj.Draw(spriteBatch));
+            var viewportBounds = GetCamera().GetBoundingRectangle();
+            var inRangeObjects = _objects.OfType<IDrawable>()
+                .Where(obj => viewportBounds.Intersects(obj.Bounds) && obj.Visible);
+
+            inRangeObjects.AsParallel().ForAll(obj => obj.Draw(spriteBatch));
+        }
+
+        public void CheckCollisions()
+        {
+            var collideObjects = _objects.OfType<ICollide>().Where(obj => obj.CanCollide);
+
+            foreach (var collideObject in collideObjects)
+            {
+                foreach (var collide in collideObjects.Where(obj => obj != collideObject))
+                {
+                    collideObject.CheckCollision(collide);
+                }
+            }
         }
 
         public IPlayer GetPlayer()
@@ -73,9 +96,9 @@ namespace VippGame.Core.Managers
             return _objects.OfType<IPlayer>().Single();
         }
 
-        public ICamera GetCamera()
+        public Camera2D GetCamera()
         {
-            return _objects.OfType<ICamera>().Single();
+            return _camera;
         }
     }
 }

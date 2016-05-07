@@ -1,5 +1,5 @@
 ﻿#region --- Header ---
-// File: IGameObject.cs
+// File: IWorld.cs
 // Original Project: VippGame
 // Original Solution: VippGame
 // ------------------------------
@@ -8,16 +8,12 @@
 #endregion
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace VippGame.Core.Interfaces
 {
-    public interface IGameObject : IObject, IUpdatable, IDrawable, IInitializable, ILoadable, ICollide
+    public interface IWorld : IObject, IUpdatable, IDrawable, IInitializable, ILoadable
     {
         Vector2 Position { get; set; }
-        Vector2 Origin { get; }
         Point Size { get; set; }
-        Texture2D Texture { get; }
-        Color Color { get; set; }
     }
 }

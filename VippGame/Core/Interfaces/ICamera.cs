@@ -18,6 +18,7 @@ namespace VippGame.Core.Interfaces
         #region --- Properties ---
 
         Vector2 Position { get; set; }
+        Rectangle Bounds { get; }
         float Zoom { get; set; }
         float Rotation { get; set; }
         Matrix TranslationMatrix { get; }

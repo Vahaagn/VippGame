@@ -8,6 +8,7 @@
 #endregion
 
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Shapes;
 
 namespace VippGame.Core.Interfaces
 {
@@ -15,6 +16,7 @@ namespace VippGame.Core.Interfaces
     {
         bool Visible { get; set; }
         int DrawOrder { get; set; }
+        RectangleF Bounds { get; }
 
         void Draw(SpriteBatch spriteBatch);
     }

@@ -1,21 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
+using VippGame.Core.Entities;
 
-namespace VippGame
+namespace VippGame.Core.Controller
 {
     public class InputController
     {
         private GameWindow _gameWindow;
-        private Camera _camera;
+        private Camera2D _camera;
         private Player _player;
         private int _lastWheelValue;
+        private const float SPEED = 5f;
 
         public InputController(GameWindow gameWindow)
         {
             _gameWindow = gameWindow;
         }
 
-        public InputController(GameWindow gameWindow, Camera camera, Player player)
+        public InputController(GameWindow gameWindow, Camera2D camera, Player player)
         {
             _gameWindow = gameWindow;
             _camera = camera;
@@ -44,16 +47,16 @@ namespace VippGame
                 switch (pressedKey)
                 {
                     case Keys.A:
-                        _player.Move(-1, 0);
+                        _player.Move(-SPEED, 0);
                         break;
                     case Keys.D:
-                        _player.Move(1, 0);
+                        _player.Move(SPEED, 0);
                         break;
                     case Keys.W:
-                        _player.Move(0, -1);
+                        _player.Move(0, -SPEED);
                         break;
                     case Keys.S:
-                        _player.Move(0, 1);
+                        _player.Move(0, SPEED);
                         break;
                 }
             }
@@ -77,7 +80,9 @@ namespace VippGame
             var wheelChange = state.ScrollWheelValue - _lastWheelValue;
             if (wheelChange != 0)
             {
-                _camera.ChangeZoom(wheelChange);
+                if (wheelChange > 0) _camera.ZoomIn(1f);
+                else _camera.ZoomOut(1f);
+
                 _lastWheelValue = state.ScrollWheelValue;
             }
         }

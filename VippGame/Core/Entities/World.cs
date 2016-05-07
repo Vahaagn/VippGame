@@ -12,18 +12,40 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Shapes;
 using System;
+using System.Collections.Generic;
 using VippGame.Core.Interfaces;
-using IDrawable = VippGame.Core.Interfaces.IDrawable;
 
 namespace VippGame.Core.Entities
 {
-    public class World : IObject, IDrawable, IUpdatable, IInitializable, ILoadable
+    public class World : IWorld
     {
-        #region --- IDrawable Members ---
+        #region --- IWorld Members ---
 
+        public ulong Id { get; }
+        public Vector2 Position { get; set; }
+        public Point Size { get; set; }
+        public RectangleF Bounds => new RectangleF(Position, Size.ToVector2());
         public bool Visible { get; set; }
         public int DrawOrder { get; set; }
+
+        private List<IGameObject> _gameObjects;
+
+        public void Initialize()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Load(ContentManager contentManager)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            throw new NotImplementedException();
+        }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -31,34 +53,5 @@ namespace VippGame.Core.Entities
         }
 
         #endregion
-
-        #region --- IInitializable Members ---
-
-        public void Initialize()
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-        #region --- ILoadable Members ---
-
-        public void Load(ContentManager contentManager)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-        #region --- IUpdatable Members ---
-
-        public void Update(GameTime gameTime)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-        public ulong Id { get; }
     }
 }
