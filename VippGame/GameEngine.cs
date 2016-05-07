@@ -16,7 +16,6 @@ namespace VippGame
         private Texture2D _dirt1;
         private Texture2D _dirt2;
         private Texture2D _dirt3;
-        private Camera _camera;
         private InputController _inputController;
         private ObjectManager _objectManager;
 
@@ -42,16 +41,16 @@ namespace VippGame
             var centerScreen = new Vector2(worldSize.X / 2f, worldSize.Y / 2f);
 
             _worldLoader = new WorldLoader(worldSize);
-            _camera = new Camera()
+            var camera = new Camera()
             {
-                Position = new Vector3(centerScreen, 0),
+                Position = centerScreen,
                 Rotation = 0f,
                 Zoom = 1f
             };
             var player = new Player() { Color = Color.White, Position = centerScreen };
-            _inputController = new InputController(Window, _camera, player);
+            _inputController = new InputController(Window, camera, player);
 
-            _objectManager.Add(player);
+            _objectManager.Add(player, camera);
             _objectManager.Initialize();
 
             _graphics.PreferredBackBufferWidth = 800;
@@ -99,7 +98,8 @@ namespace VippGame
 
             _objectManager.Update(gameTime);
 
-            _camera.LookAt(_objectManager.GetPlayer());
+            _objectManager.GetCamera()
+                .LookAt(_objectManager.GetPlayer());
 
             base.Update(gameTime);
         }
@@ -111,7 +111,8 @@ namespace VippGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            _spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null, _camera.TranslationMatrix);
+            _spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null,
+                _objectManager.GetCamera().TranslationMatrix);
 
             _worldLoader.Draw(_spriteBatch, _dirt1, _dirt2, _dirt3);
 

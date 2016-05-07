@@ -72,5 +72,10 @@ namespace VippGame.Core.Managers
         {
             return _objects.OfType<IPlayer>().Single();
         }
+
+        public ICamera GetCamera()
+        {
+            return _objects.OfType<ICamera>().Single();
+        }
     }
 }

@@ -1,16 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 using VippGame.Core.Interfaces;
-using VippGame.Helpers;
 
 namespace VippGame
 {
-    public class Camera
+    public class Camera : ICamera
     {
-        public Vector3 Position { get; set; }
+        #region --- Constants ---
+
+        private const float MIN_ZOOM = 1f;
+        private const float MAX_ZOOM = 5f;
+
+        #endregion
+
+        #region --- ICamera Members ---
+
+        public ulong Id { get; }
+
+        public Vector2 Position { get; set; }
         public float Zoom { get; set; }
         public float Rotation { get; set; }
-        public float MinZoom = 1f;
-        public float MaxZoom = 5f;
 
         public Matrix TranslationMatrix
         {
@@ -32,26 +40,32 @@ namespace VippGame
             {
                 Zoom += cameraZoomChange;
             }
-            else if (Zoom + cameraZoomChange > MaxZoom)
+            else if (Zoom + cameraZoomChange > MAX_ZOOM)
             {
-                Zoom = MaxZoom;
+                Zoom = MAX_ZOOM;
             }
-            else if (Zoom + cameraZoomChange < MinZoom)
+            else if (Zoom + cameraZoomChange < MIN_ZOOM)
             {
-                Zoom = MinZoom;
+                Zoom = MIN_ZOOM;
             }
-        }
-
-        public bool CanZoom(float difference)
-        {
-            var newValue = Zoom + difference;
-
-            return newValue >= MinZoom && newValue <= MaxZoom;
         }
 
         public void LookAt(IGameObject gameObject)
         {
-            Position = gameObject.Position.ToVector3();
+            Position = gameObject.Position;
         }
+
+        #endregion
+
+        #region --- Public methods ---
+
+        private bool CanZoom(float difference)
+        {
+            var newValue = Zoom + difference;
+
+            return newValue >= MIN_ZOOM && newValue <= MAX_ZOOM;
+        }
+
+        #endregion
     }
 }
