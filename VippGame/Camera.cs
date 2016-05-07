@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using VippGame.Core.Interfaces;
 using VippGame.Helpers;
 
 namespace VippGame

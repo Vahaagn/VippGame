@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using VippGame.Core.Managers;
 
 namespace VippGame
 {
@@ -17,7 +18,7 @@ namespace VippGame
         private Texture2D _dirt3;
         private Camera _camera;
         private InputController _inputController;
-        private Player _player;
+        private ObjectManager _objectManager;
 
         public GameEngine()
         {
@@ -35,7 +36,8 @@ namespace VippGame
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            _objectManager = new ObjectManager();
+
             var worldSize = new Point(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
             var centerScreen = new Vector2(worldSize.X / 2f, worldSize.Y / 2f);
 
@@ -46,8 +48,11 @@ namespace VippGame
                 Rotation = 0f,
                 Zoom = 1f
             };
-            _player = new Player() { Color = Color.White, Position = centerScreen };
-            _inputController = new InputController(Window, _camera, _player);
+            var player = new Player() { Color = Color.White, Position = centerScreen };
+            _inputController = new InputController(Window, _camera, player);
+
+            _objectManager.Add(player);
+            _objectManager.Initialize();
 
             _graphics.PreferredBackBufferWidth = 800;
             _graphics.PreferredBackBufferHeight = 480;
@@ -67,9 +72,8 @@ namespace VippGame
             _dirt1 = Content.Load<Texture2D>("Textures/dirt1");
             _dirt2 = Content.Load<Texture2D>("Textures/dirt2");
             _dirt3 = Content.Load<Texture2D>("Textures/dirt3");
-            _player.Texture = Content.Load<Texture2D>("Player/player1");
 
-            // TODO: use this.Content to load your game content here
+            _objectManager.Load(Content);
         }
 
         /// <summary>
@@ -92,9 +96,10 @@ namespace VippGame
                 Exit();
 
             _inputController.Update();
-            _player.Update(gameTime);
 
-            _camera.LookAt(_player);
+            _objectManager.Update(gameTime);
+
+            _camera.LookAt(_objectManager.GetPlayer());
 
             base.Update(gameTime);
         }
@@ -109,7 +114,8 @@ namespace VippGame
             _spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null, _camera.TranslationMatrix);
 
             _worldLoader.Draw(_spriteBatch, _dirt1, _dirt2, _dirt3);
-            _player.Draw(_spriteBatch);
+
+            _objectManager.Draw(_spriteBatch);
 
             _spriteBatch.End();
 

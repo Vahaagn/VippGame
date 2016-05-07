@@ -10,6 +10,11 @@ namespace VippGame
         private Player _player;
         private int _lastWheelValue;
 
+        public InputController(GameWindow gameWindow)
+        {
+            _gameWindow = gameWindow;
+        }
+
         public InputController(GameWindow gameWindow, Camera camera, Player player)
         {
             _gameWindow = gameWindow;

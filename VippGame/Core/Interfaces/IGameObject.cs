@@ -4,22 +4,19 @@
 // Original Solution: VippGame
 // ------------------------------
 // Created by: Mateusz Giza
-// Created on: 2016/05/05
+// Created on: 2016/05/07
 #endregion
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace VippGame
+namespace VippGame.Core.Interfaces
 {
-    public interface IGameObject
+    public interface IGameObject : IObject, IUpdatable, IDrawable, IInitializable, ILoadable
     {
         Vector2 Position { get; set; }
-        Point Size { get; }
-        Texture2D Texture { get; set; }
+        Point Size { get; set; }
+        Texture2D Texture { get; }
         Color Color { get; set; }
-
-        void Update(GameTime gameTime);
-        void Draw(SpriteBatch spriteBatch);
     }
 }
