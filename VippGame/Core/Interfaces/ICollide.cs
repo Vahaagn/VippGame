@@ -22,7 +22,7 @@ namespace VippGame.Core.Interfaces
         Vector2 Position { get; }
         Point Size { get; }
 
-        CollisionResult CheckCollision(ICollide collideObject);
+        void CheckCollision(ICollide collideObject);
 
         event EventHandler<CollideEventArgs> Colliding;
     }

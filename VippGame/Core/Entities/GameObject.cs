@@ -65,27 +65,17 @@ namespace VippGame.Core.Entities
             spriteBatch.Draw(Texture, new Rectangle(Position.ToPoint(), Size), Color);
         }
 
-        public CollisionResult CheckCollision(ICollide collideObject)
+        public void CheckCollision(ICollide collideObject)
         {
             var self = (ICollide)this;
             var collisionHandler = new CollisionHandler();
 
-            var result = collisionHandler.CheckCollisions(self, collideObject);
-            bool collisionDetected = result.Left | result.Right | result.Up | result.Down;
+            collisionHandler.CheckCollisions(self, collideObject);
 
-            if (collisionDetected)
+            if (IsColliding)
             {
-                IsColliding = true;
-                CollisionResult = result;
-                Colliding?.Invoke(this, new CollideEventArgs(result, collideObject));
+                Colliding?.Invoke(this, new CollideEventArgs(CollisionResult, collideObject));
             }
-            else
-            {
-                IsColliding = false;
-                CollisionResult = new CollisionResult();
-            }
-
-            return result;
         }
 
         public event EventHandler<CollideEventArgs> Colliding;

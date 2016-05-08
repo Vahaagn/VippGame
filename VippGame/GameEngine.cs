@@ -27,6 +27,7 @@ namespace VippGame
         {
             _graphics = new GraphicsDeviceManager(this);
 
+            Window.AllowUserResizing = true;
             IsMouseVisible = true;
 
             Content.RootDirectory = "Content";
@@ -40,9 +41,14 @@ namespace VippGame
         /// </summary>
         protected override void Initialize()
         {
+            _graphics.PreferredBackBufferWidth = 800;
+            _graphics.PreferredBackBufferHeight = 480;
+            _graphics.PreferMultiSampling = true;
+            _graphics.ApplyChanges();
+
             _objectManager = new ObjectManager();
 
-            var worldSize = new Point(5000, 5000);
+            var worldSize = new Point(1280 * 5, 720 * 5);
             var centerScreen = new Vector2(worldSize.X / 2f, worldSize.Y / 2f);
 
             _worldLoader = new WorldLoader(worldSize);
@@ -54,8 +60,8 @@ namespace VippGame
             //    ViewPort = GraphicsDevice.Viewport
             //};
             var viewportAdapter = new BoxingViewportAdapter(Window, _graphics, worldSize.X, worldSize.Y);
-            var camera = new Camera2D(viewportAdapter) { Zoom = 5f };
-            var player = new Player() { Color = Color.White, Position = centerScreen };
+            var camera = new Camera2D(viewportAdapter) { Zoom = 8f, MinimumZoom = 8f, MaximumZoom = 15f };
+            var player = new Player() { Color = Color.White, Position = new Vector2(200, 200) };
             var cubes = new[]
             {
                 new Cube(50, 50),
@@ -63,6 +69,8 @@ namespace VippGame
                 new Cube(150, 50),
                 new Cube(50, 100),
                 new Cube(50, 150),
+                new Cube(75, 50),
+                new Cube(50, 75)
             };
 
             _inputController = new InputController(Window, camera, player);

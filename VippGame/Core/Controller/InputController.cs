@@ -11,7 +11,7 @@ namespace VippGame.Core.Controller
         private Camera2D _camera;
         private Player _player;
         private int _lastWheelValue;
-        private const float SPEED = 5f;
+        private const float SPEED = 1f;
 
         public InputController(GameWindow gameWindow)
         {
@@ -59,6 +59,11 @@ namespace VippGame.Core.Controller
                         _player.Move(0, SPEED);
                         break;
                 }
+            }
+
+            if (state.IsKeyDown(Keys.Back))
+            {
+                _player.Position = new Vector2(200, 200);
             }
 
             if (state.IsKeyDown(Keys.Q))

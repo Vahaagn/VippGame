@@ -14,6 +14,7 @@ using MonoGame.Extended;
 using System.Collections.Generic;
 using System.Linq;
 using VippGame.Core.Interfaces;
+using VippGame.Core.Structs;
 using IDrawable = VippGame.Core.Interfaces.IDrawable;
 
 namespace VippGame.Core.Managers
@@ -84,8 +85,16 @@ namespace VippGame.Core.Managers
 
             foreach (var collideObject in collideObjects)
             {
-                foreach (var collide in collideObjects.Where(obj => obj != collideObject))
+                collideObject.IsColliding = false;
+                collideObject.CollisionResult = CollisionResult.Empty;
+            }
+
+            foreach (var collideObject in collideObjects)
+            {
+                foreach (var collide in collideObjects)
                 {
+                    if (collide == collideObject) continue;
+
                     collideObject.CheckCollision(collide);
                 }
             }

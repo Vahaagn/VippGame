@@ -17,20 +17,14 @@ namespace VippGame.Core.Handlers
     {
         private const float COLLISION_TOLERANCE = 1f;
 
-        public CollisionResult CheckCollisions(ICollide main, ICollide other)
+        public void CheckCollisions(ICollide main, ICollide other)
         {
-            var result = new CollisionResult();
-
-            // Neither one want to collide with another :D
-            if (!main.CanCollide || !other.CanCollide)
-            {
-                return result;
-            }
+            var result = CollisionResult.Empty;
 
             DoHorizontalChecks(main, other, ref result);
             DoVerticalChecks(main, other, ref result);
 
-            return result;
+            UpdateCollisionInformation(main, other, ref result);
         }
 
         private void DoHorizontalChecks(ICollide main, ICollide other, ref CollisionResult result)
@@ -79,6 +73,37 @@ namespace VippGame.Core.Handlers
             {
                 result.Down = Math.Abs((main.Position.Y + main.Size.Y) - other.Position.Y) <= COLLISION_TOLERANCE;
             }
+        }
+
+        private void UpdateCollisionInformation(ICollide main, ICollide other, ref CollisionResult result)
+        {
+            if (CheckCollisionResult(ref result))
+            {
+                main.IsColliding = true;
+                other.IsColliding = true;
+
+                main.CollisionResult |= result;
+                other.CollisionResult |= InvertCollisionResult(ref result);
+            }
+        }
+
+        public bool CheckCollisionResult(ref CollisionResult result)
+        {
+            bool collisionDetected = result.Left | result.Right | result.Up | result.Down;
+
+            return collisionDetected;
+        }
+
+        private CollisionResult InvertCollisionResult(ref CollisionResult result)
+        {
+            var inverted = new CollisionResult();
+
+            if (result.Left) inverted.Right = true;
+            if (result.Right) inverted.Left = true;
+            if (result.Up) inverted.Down = true;
+            if (result.Down) inverted.Up = true;
+
+            return inverted;
         }
     }
 }
