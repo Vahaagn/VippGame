@@ -33,6 +33,8 @@ namespace VippGame.Core.Entities
         {
             base.Initialize();
 
+            isCheckable = true;
+
             Colliding += OnColliding;
         }
 

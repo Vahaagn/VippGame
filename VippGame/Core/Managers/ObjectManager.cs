@@ -73,8 +73,9 @@ namespace VippGame.Core.Managers
         public void Draw(SpriteBatch spriteBatch)
         {
             var viewportBounds = GetCamera().GetBoundingRectangle();
-            var inRangeObjects = _objects.OfType<IDrawable>()
-                .Where(obj => viewportBounds.Intersects(obj.Bounds) && obj.Visible);
+
+            var inRangeObjects = _objects.OfType<IDrawable>();
+            //.Where(obj => viewportBounds.Intersects(obj.Bounds) && obj.Visible);
 
             inRangeObjects.AsParallel().ForAll(obj => obj.Draw(spriteBatch));
         }
@@ -83,13 +84,13 @@ namespace VippGame.Core.Managers
         {
             var collideObjects = _objects.OfType<ICollide>().Where(obj => obj.CanCollide);
 
-            foreach (var collideObject in collideObjects)
+            foreach (var collideObject in collideObjects.Where(obj => obj.isCheckable))
             {
                 collideObject.IsColliding = false;
                 collideObject.CollisionResult = CollisionResult.Empty;
             }
 
-            foreach (var collideObject in collideObjects)
+            foreach (var collideObject in collideObjects.Where(obj => obj.isCheckable))
             {
                 foreach (var collide in collideObjects)
                 {
@@ -109,5 +110,7 @@ namespace VippGame.Core.Managers
         {
             return _camera;
         }
+
+        public IList<IObject> GetGameObjectsList() => _objects;
     }
 }

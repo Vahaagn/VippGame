@@ -29,6 +29,7 @@ namespace VippGame.Core.Entities
         public bool Visible { get; set; }
         public int DrawOrder { get; set; }
         public bool CanCollide { get; set; }
+        public bool isCheckable { get; set; }
         public bool IsColliding { get; set; }
         public CollisionResult CollisionResult { get; set; }
         public Vector2 Position { get; set; }

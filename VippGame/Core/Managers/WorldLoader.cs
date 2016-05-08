@@ -1,73 +1,43 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
+using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.Shapes;
 using System;
+using VippGame.Core.Interfaces;
+using IDrawable = VippGame.Core.Interfaces.IDrawable;
 
 namespace VippGame.Core.Managers
 {
-    public class WorldLoader
+    public class WorldLoader : IObject, ILoadable, IInitializable, IDrawable
     {
-        private byte[,] _worldData;
-        private readonly int _tileSize;
-        private float _scale = 1f;
+        public ulong Id { get; }
         private Random _rand;
-        private Point _size;
+        private TiledMap _map;
+        private Camera2D _camera;
 
-        public WorldLoader(Point size, int tileSize = 16)
+        public WorldLoader(Camera2D camera, int tileSize = 16)
         {
-            _size = size;
-            _tileSize = tileSize;
+            _camera = camera;
             _rand = new Random(DateTime.UtcNow.Millisecond);
-
-            Init();
         }
 
-        private void Init()
+        public void Load(ContentManager contentManager)
         {
-            //_worldData = new byte[,]
-            //{
-            //    {1, 1, 1, 0},
-            //    {1, 0, 0, 1},
-            //    {1, 1, 0, 1}
-            //};
-            int tilesX = (int)(_size.X / (_tileSize * _scale));
-            int tilesY = (int)(_size.Y / (_tileSize * _scale));
-            _worldData = new byte[tilesY, tilesX];
-            Generate();
+            _map = contentManager.Load<TiledMap>("Maps/test");
         }
 
-        private void Generate()
+        public void Initialize()
         {
-            for (int i = 0; i < _worldData.GetLength(0); ++i)
-            {
-                for (int j = 0; j < _worldData.GetLength(1); ++j)
-                {
-                    var n = _rand.Next(0, 3);
-                    _worldData[i, j] = (byte)n;
-                }
-            }
+            Visible = true;
         }
 
-        public void Draw(SpriteBatch spriteBatch, RectangleF viewport, params Texture2D[] textures)
+        public bool Visible { get; set; }
+        public int DrawOrder { get; set; }
+        public RectangleF Bounds => new RectangleF(0, 0, _map.Width, _map.Height);
+        public void Draw(SpriteBatch spriteBatch)
         {
-            for (int i = 0; i < _worldData.GetLength(0); ++i)
-            {
-                for (int j = 0; j < _worldData.GetLength(1); ++j)
-                {
-                    if (_worldData[i, j] == 0)
-                    {
-                        continue;
-                    }
-
-                    var pos = new Vector2(j * _tileSize, i * _tileSize);
-                    var box = new RectangleF(pos, new Vector2(_tileSize, _tileSize));
-                    if (!viewport.Intersects(box)) continue;
-
-                    var randomIndex = (int)_worldData[i, j];
-
-                    spriteBatch.Draw(textures[randomIndex], pos, null, Color.White, 0f, Vector2.Zero, _scale, SpriteEffects.None, 1f);
-                }
-            }
+            _map.Draw(spriteBatch, _camera);
         }
     }
 }

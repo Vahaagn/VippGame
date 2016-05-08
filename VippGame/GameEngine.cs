@@ -41,46 +41,23 @@ namespace VippGame
         /// </summary>
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = 800;
-            _graphics.PreferredBackBufferHeight = 480;
             _graphics.PreferMultiSampling = true;
             _graphics.ApplyChanges();
 
             _objectManager = new ObjectManager();
 
-            var worldSize = new Point(1280 * 5, 720 * 5);
+            var worldSize = new Point(1280 * 1, 720 * 1);
             var centerScreen = new Vector2(worldSize.X / 2f, worldSize.Y / 2f);
 
-            _worldLoader = new WorldLoader(worldSize);
-            //var camera = new Camera()
-            //{
-            //    Position = centerScreen,
-            //    Rotation = 0f,
-            //    Zoom = 1f,
-            //    ViewPort = GraphicsDevice.Viewport
-            //};
             var viewportAdapter = new BoxingViewportAdapter(Window, _graphics, worldSize.X, worldSize.Y);
-            var camera = new Camera2D(viewportAdapter) { Zoom = 8f, MinimumZoom = 8f, MaximumZoom = 15f };
-            var player = new Player() { Color = Color.White, Position = new Vector2(200, 200) };
-            var cubes = new[]
-            {
-                new Cube(50, 50),
-                new Cube(100, 50),
-                new Cube(150, 50),
-                new Cube(50, 100),
-                new Cube(50, 150),
-                new Cube(75, 50),
-                new Cube(50, 75)
-            };
+            var camera = new Camera2D(viewportAdapter) { Zoom = 1f, MinimumZoom = 1f, MaximumZoom = 15f };
+            var player = new Player() { Color = Color.White, Position = new Vector2(100, 100) };
 
+            _worldLoader = new WorldLoader(camera);
             _inputController = new InputController(Window, camera, player);
 
             _objectManager.AddCamera(camera);
-            _objectManager.Add(player);
-            foreach (var cube in cubes)
-            {
-                _objectManager.Add(cube);
-            }
+            _objectManager.Add(_worldLoader, player);
             _objectManager.Initialize();
 
             base.Initialize();
@@ -139,7 +116,7 @@ namespace VippGame
             _spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null,
                 _objectManager.GetCamera().GetViewMatrix());
 
-            _worldLoader.Draw(_spriteBatch, _objectManager.GetCamera().GetBoundingRectangle(), _dirt1, _dirt2, _dirt3);
+            //_worldLoader.Draw(_spriteBatch, _objectManager.GetCamera().GetBoundingRectangle(), _dirt1, _dirt2, _dirt3);
 
             _objectManager.Draw(_spriteBatch);
 

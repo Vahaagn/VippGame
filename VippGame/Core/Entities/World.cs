@@ -13,7 +13,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Shapes;
-using System;
 using System.Collections.Generic;
 using VippGame.Core.Interfaces;
 
@@ -30,26 +29,41 @@ namespace VippGame.Core.Entities
         public bool Visible { get; set; }
         public int DrawOrder { get; set; }
 
-        private List<IGameObject> _gameObjects;
+        private IList<IObject> _gameObjects;
+
+        public World(IList<IObject> gameObjects)
+        {
+            _gameObjects = gameObjects;
+        }
 
         public void Initialize()
         {
-            throw new NotImplementedException();
+
         }
 
         public void Load(ContentManager contentManager)
         {
-            throw new NotImplementedException();
+
         }
 
         public void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
+
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            throw new NotImplementedException();
+            //
+        }
+
+        public void Draw(SpriteBatch spriteBatch, RectangleF viewport)
+        {
+
+        }
+
+        public void Add(IGameObject gameObject)
+        {
+            _gameObjects.Add(gameObject);
         }
 
         #endregion

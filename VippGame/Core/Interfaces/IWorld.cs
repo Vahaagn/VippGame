@@ -8,12 +8,16 @@
 #endregion
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Shapes;
 
 namespace VippGame.Core.Interfaces
 {
-    public interface IWorld : IObject, IUpdatable, IDrawable, IInitializable, ILoadable
+    public interface IWorld : IObject, IUpdatable, IInitializable, ILoadable
     {
         Vector2 Position { get; set; }
         Point Size { get; set; }
+
+        void Draw(SpriteBatch spriteBatch, RectangleF viewport);
     }
 }

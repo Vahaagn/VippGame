@@ -17,6 +17,7 @@ namespace VippGame.Core.Interfaces
     public interface ICollide
     {
         bool CanCollide { get; set; }
+        bool isCheckable { get; set; }
         bool IsColliding { get; set; }
         CollisionResult CollisionResult { get; set; }
         Vector2 Position { get; }
