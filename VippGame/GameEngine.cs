@@ -53,7 +53,7 @@ namespace VippGame
             var camera = new Camera2D(viewportAdapter) { Zoom = 1f, MinimumZoom = 1f, MaximumZoom = 15f };
             var player = new Player() { Color = Color.White, Position = new Vector2(100, 100) };
 
-            _worldLoader = new WorldLoader(camera);
+            _worldLoader = new WorldLoader("test");
             _inputController = new InputController(Window, camera, player);
 
             _objectManager.AddCamera(camera);
@@ -101,7 +101,7 @@ namespace VippGame
 
             _objectManager.Update(gameTime);
 
-            _objectManager.GetCamera().LookAt(_objectManager.GetPlayer().Position);
+            _objectManager.GetCamera().LookAt(_objectManager.GetPlayer().Origin);
 
             base.Update(gameTime);
         }

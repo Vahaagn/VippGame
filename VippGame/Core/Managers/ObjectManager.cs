@@ -74,10 +74,21 @@ namespace VippGame.Core.Managers
         {
             var viewportBounds = GetCamera().GetBoundingRectangle();
 
+            var worlds = _objects.OfType<IWorld>();
+            foreach (var world in worlds)
+            {
+                world.Draw(spriteBatch, viewportBounds);
+            }
+
             var inRangeObjects = _objects.OfType<IDrawable>();
             //.Where(obj => viewportBounds.Intersects(obj.Bounds) && obj.Visible);
 
-            inRangeObjects.AsParallel().ForAll(obj => obj.Draw(spriteBatch));
+            //inRangeObjects.AsParallel().ForAll(obj => obj.Draw(spriteBatch));
+
+            foreach (var inRangeObject in inRangeObjects)
+            {
+                inRangeObject.Draw(spriteBatch);
+            }
         }
 
         public void CheckCollisions()

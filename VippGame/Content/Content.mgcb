@@ -87,7 +87,29 @@
 /build:Maps/3ss6Z.png
 
 #begin Maps/test.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/test.tmx
+/copy:Maps/test.tmx
+
+#begin Maps/Tiles/dirt1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/Tiles/dirt1.png
+
+#begin Maps/Tiles/dirt2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/Tiles/dirt2.png
 

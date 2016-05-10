@@ -62,7 +62,7 @@ namespace VippGame.Core.Entities
 
         public void LookAt(IGameObject gameObject)
         {
-            Position = gameObject.Position - new Vector2(ViewPort.Width * 0.5f, ViewPort.Height * 0.5f);
+            Position = gameObject.Origin - new Vector2(ViewPort.Width * 0.5f, ViewPort.Height * 0.5f);
         }
 
         #endregion

@@ -11,7 +11,7 @@ namespace VippGame.Core.Controller
         private Camera2D _camera;
         private Player _player;
         private int _lastWheelValue;
-        private const float SPEED = 1f;
+        private const float SPEED = 2f;
 
         public InputController(GameWindow gameWindow)
         {
