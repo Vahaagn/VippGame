@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <tchar.h>
 #include <functional>
+#include <typeinfo>
 
 #include <SFML/OpenGL.hpp>
 #include <SFML/Graphics.hpp>
@@ -18,3 +19,5 @@
 #include <SFML/Window.hpp>
 #include <SFML/Network.hpp>
 #include <SFML/Audio.hpp>
+
+#include "ExceptionTypeEnum.h"

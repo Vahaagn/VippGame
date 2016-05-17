@@ -8,9 +8,8 @@
 int main()
 {
 	GameEngine game_engine;
-	game_engine.init();
-	game_engine.show_fps_counter();
-	game_engine.start();
+	game_engine.Initialize();
+	game_engine.Start();
 
 	//InputManager input_manager(window);
 	//MouseManager& mouse_manager = input_manager.getMouseManager();
