@@ -155,12 +155,16 @@
     <ClInclude Include="ExceptionHandler.h" />
     <ClInclude Include="ExceptionTypeEnum.h" />
     <ClInclude Include="GameEngine.h" />
+    <ClInclude Include="GameException.h" />
+    <ClInclude Include="GameLogger.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ExceptionHandler.cpp" />
     <ClCompile Include="GameEngine.cpp" />
+    <ClCompile Include="GameException.cpp" />
+    <ClCompile Include="GameLogger.cpp" />
     <ClCompile Include="OOProject.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

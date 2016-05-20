@@ -8,6 +8,10 @@ private:
 	sf::Window _window;
 	bool _isStarted;
 
+	// Helpers
+	ExceptionHandler& _exception_handler;
+	GameLogger& _game_logger;
+
 public:
 	GameEngine();
 	~GameEngine();

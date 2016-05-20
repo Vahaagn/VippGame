@@ -25,6 +25,9 @@
     <Filter Include="Enums">
       <UniqueIdentifier>{e63d46ed-102b-4b44-9e5a-6cc66849485e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Exceptions">
+      <UniqueIdentifier>{35f2a8d9-8b44-4352-958b-2a0fc5d7f91c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -45,6 +48,12 @@
     <ClInclude Include="ExceptionTypeEnum.h">
       <Filter>Enums</Filter>
     </ClInclude>
+    <ClInclude Include="GameException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -57,6 +66,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ExceptionHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameException.cpp">
+      <Filter>Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLogger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

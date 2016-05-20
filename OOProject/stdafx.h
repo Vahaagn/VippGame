@@ -21,3 +21,6 @@
 #include <SFML/Audio.hpp>
 
 #include "ExceptionTypeEnum.h"
+
+#include "ExceptionHandler.h"
+#include "GameLogger.h"

@@ -2,7 +2,6 @@
 //
 
 #include "stdafx.h"
-
 #include "GameEngine.h"
 
 int main()
