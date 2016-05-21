@@ -30,6 +30,7 @@ namespace VippGame.Core.Entities
         public int DrawOrder { get; set; }
 
         private IList<IObject> _gameObjects;
+        public IList<IGameObject> WorldObjects { get; private set; }
 
         public World(IList<IObject> gameObjects)
         {

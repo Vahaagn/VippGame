@@ -41,6 +41,7 @@ namespace VippGame.Core.Entities
         }
 
         public RectangleF Bounds => new RectangleF(Position, Size.ToVector2());
+        public RectangleF CollisionBoundary => Bounds;
         public Texture2D Texture { get; set; }
         public Color Color { get; set; }
 

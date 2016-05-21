@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TiledSharp;
-using VippGame.Core.Interfaces;
 
 namespace VippGame.Core.Managers
 {
@@ -19,16 +18,17 @@ namespace VippGame.Core.Managers
         public int TilesInHeight;
     }
 
-    public class WorldLoader : IWorld
+    public class WorldLoader
     {
+        private const int MARGIN_TOP = 6;
+        private const int MARGIN_LEFT = 6;
         public ulong Id { get; }
         private Random _rand;
 
         private TmxMap _map;
         private TilesInfo _tiles;
-        public bool Visible { get; set; }
-        public int DrawOrder { get; set; }
-        public RectangleF Bounds => new RectangleF(0, 0, _map.Width, _map.Height);
+
+
 
         public WorldLoader(string mapName, int tileSize = 16)
         {
@@ -71,6 +71,8 @@ namespace VippGame.Core.Managers
                 Width = _map.Tilesets[0].TileWidth,
                 Height = _map.Tilesets[0].TileHeight,
             };
+
+
         }
 
         public void Draw(SpriteBatch spriteBatch, RectangleF viewport)
@@ -89,11 +91,6 @@ namespace VippGame.Core.Managers
 
                 string name = _map.Tilesets.First().Name;
 
-                var leftMargin = 6;
-                var rightMargin = 9;
-                var upMargin = 6;
-                var downMargin = 6;
-
                 int tileFrame = gid;
                 int column = tileFrame % _tiles.TilesInWidth - 1;
                 int row = tileFrame / _tiles.TilesInWidth;
@@ -101,7 +98,7 @@ namespace VippGame.Core.Managers
                 int x = i % _map.Width * _map.TileWidth;
                 int y = (int)Math.Floor(i / (double)_map.Width) * _map.TileHeight;
 
-                var tilesetRec = new Rectangle(_tiles.Width * column + leftMargin, _tiles.Height * row + upMargin, _tiles.Width, _tiles.Height);
+                var tilesetRec = new Rectangle(_tiles.Width * column + MARGIN_LEFT, _tiles.Height * row + MARGIN_TOP, _tiles.Width, _tiles.Height);
                 var positionRec = new Rectangle(x, y, _tiles.Width, _tiles.Height);
 
                 if (!viewport.Intersects(positionRec))

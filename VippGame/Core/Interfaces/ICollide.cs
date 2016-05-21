@@ -8,6 +8,7 @@
 #endregion
 
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Shapes;
 using System;
 using VippGame.Core.Events;
 using VippGame.Core.Structs;
@@ -22,6 +23,7 @@ namespace VippGame.Core.Interfaces
         CollisionResult CollisionResult { get; set; }
         Vector2 Position { get; }
         Point Size { get; }
+        RectangleF CollisionBoundary { get; }
 
         void CheckCollision(ICollide collideObject);
 

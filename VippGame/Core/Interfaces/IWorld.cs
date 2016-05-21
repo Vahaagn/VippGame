@@ -9,11 +9,14 @@
 
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Shapes;
+using System.Collections.Generic;
 
 namespace VippGame.Core.Interfaces
 {
     public interface IWorld : IObject, IInitializable, ILoadable //, IUpdatable
     {
+        IList<IGameObject> WorldObjects { get; }
+
         //Vector2 Position { get; set; }
         //Point Size { get; set; }
 
