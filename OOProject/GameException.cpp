@@ -25,7 +25,7 @@ ExceptionTypeEnum GameException::GetType() const
 	return _type;
 }
 
-std::string GameException::GetMessageW() const
+std::string GameException::GetMessage() const
 {
 	return _message;
 }

@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include "GameEngine.h"
 
+#define DEBUG false
+
 int main()
 {
 	GameEngine game_engine;
@@ -16,6 +18,10 @@ int main()
 	//shape.setFillColor(sf::Color::Green);
 	//shape.setPosition((window.getSize().x / 2) - shape.getRadius(), (window.getSize().y / 2) - shape.getRadius());
 	//mouse_manager.assignCursor(shape);
+
+#if DEBUG
+	system("PAUSE");
+#endif DEBUG
 
 	return 0;
 }

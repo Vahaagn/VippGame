@@ -13,7 +13,7 @@ public:
 	GameException(ExceptionTypeEnum type, std::string message);
 	virtual ~GameException();
 
-	const char* what() const throw();
+	const char* what() const throw() override;
 	ExceptionTypeEnum GetType() const;
 	std::string GetMessage() const;
 };

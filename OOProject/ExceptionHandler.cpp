@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "ExceptionHandler.h"
+#include "GameException.h"
 
 ExceptionHandler* ExceptionHandler::_instance = nullptr;
 
@@ -17,13 +18,16 @@ void ExceptionHandler::Handle(std::exception& exception)
 {
 	auto type = getExceptionType(exception);
 
-	switch(type)
+	switch (type)
 	{
 	case GAME_UNKNOWN:
 		print(exception);
 		break;
 	case EXCEPTION:
 		print(exception);
+		break;
+	case GAME_EXIT:
+		//
 		break;
 	case UNKNOWN:
 		throw;
@@ -34,20 +38,33 @@ void ExceptionHandler::Handle(std::exception& exception)
 	}
 }
 
-void ExceptionHandler::print(std::exception& exception) const
+void ExceptionHandler::print(const std::exception& exception) const
 {
 	std::cout << exception.what() << std::endl;
 }
 
+
+bool ExceptionHandler::is_struct_or_class(const std::string name, const std::exception& exception)
+{
+	std::string exception_name = typeid(exception).name();
+
+	bool result = "struct " + name == exception_name ||
+		"class " + name == exception_name;
+
+	return result;
+}
+
 ExceptionTypeEnum ExceptionHandler::getExceptionType(std::exception& exception)
 {
-	auto exception_name = typeid(exception).name();
+	std::string exception_name = typeid(exception).name();
 
-	if (exception_name == "GameException")
+	if (is_struct_or_class("GameException", exception))
 	{
-		return GAME_UNKNOWN;
+		auto game_exception = static_cast<GameException&>(exception);
+
+		return game_exception.GetType();
 	}
-	if (exception_name == "exception")
+	if (is_struct_or_class("exception", exception))
 	{
 		return EXCEPTION;
 	}

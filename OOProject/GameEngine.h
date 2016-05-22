@@ -5,7 +5,7 @@
 class GameEngine
 {
 private:
-	sf::Window _window;
+	sf::RenderWindow _window;
 	bool _isStarted;
 
 	// Helpers
@@ -20,6 +20,8 @@ public:
 	void Start();
 
 private:
-	void Update();
-	void Draw();
+	void Update(sf::Time elapsed_time);
+	void Draw(sf::Time elapsed_time);
+
+	void get_events();
 };

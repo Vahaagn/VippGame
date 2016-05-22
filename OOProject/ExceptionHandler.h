@@ -13,5 +13,6 @@ public:
 
 private:
 	ExceptionTypeEnum getExceptionType(std::exception &exception);
-	void print(std::exception &exception) const;
+	bool is_struct_or_class(const std::string name, const std::exception& exception);
+	void print(const std::exception &exception) const;
 };
