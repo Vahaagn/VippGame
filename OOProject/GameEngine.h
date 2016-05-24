@@ -1,12 +1,18 @@
 ﻿#pragma once
 
 #include "stdafx.h"
+#include "Character.h"
+#include "FpsCounter.h"
 
 class GameEngine
 {
 private:
 	sf::RenderWindow _window;
 	bool _isStarted;
+
+	// Objects
+	Character* _character;
+	FpsCounter* _fps_counter;
 
 	// Helpers
 	ExceptionHandler& _exception_handler;
@@ -18,6 +24,8 @@ public:
 
 	void Initialize();
 	void Start();
+	void Stop();
+	void Close();
 
 private:
 	void Update(sf::Time elapsed_time);

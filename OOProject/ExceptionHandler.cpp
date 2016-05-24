@@ -20,6 +20,9 @@ void ExceptionHandler::Handle(std::exception& exception)
 
 	switch (type)
 	{
+	case FONT_NOT_LOADED:
+		print(exception);
+		break;
 	case GAME_UNKNOWN:
 		print(exception);
 		break;

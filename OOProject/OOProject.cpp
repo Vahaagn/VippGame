@@ -4,8 +4,6 @@
 #include "stdafx.h"
 #include "GameEngine.h"
 
-#define DEBUG false
-
 int main()
 {
 	GameEngine game_engine;

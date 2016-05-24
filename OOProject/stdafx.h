@@ -5,6 +5,10 @@
 
 #pragma once
 
+#define TRUE 1
+#define FALSE 0
+#define DEBUG FALSE
+
 #include "targetver.h"
 
 #include <iostream>
@@ -21,6 +25,9 @@
 #include <SFML/Audio.hpp>
 
 #include "ExceptionTypeEnum.h"
+#include "GameException.h"
 
 #include "ExceptionHandler.h"
 #include "GameLogger.h"
+
+#include "FontsManager.h"
